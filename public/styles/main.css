@@ -1,4 +1,42 @@
 body {
     background: #000000;
     text-align: center;
+    font-size: 12px;
+}
+
+h1 {
+    color: #fff;
+    font-size: 2em;
+    font-weight: bold;
+    margin: 20px auto;
+}
+
+.controller {
+    width: 200px;
+    background: #555;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.controller input {
+    display: inline-block;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 70%;
+    text-align: center;
+}
+
+.controller button {
+    margin: 10px 4% 0 0;
+    padding: 5px;
+    width: 40%;
+}
+
+.controller label {
+    display: inline-block;
+    margin: 10px 0 0 0;
+    padding: 0;
+    text-align: left;
+    font-weight: bold;
+    width: 30%;
 }

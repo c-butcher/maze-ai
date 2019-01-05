@@ -199,6 +199,9 @@ function Maze(width, height, cellSize) {
      * @returns {Maze}
      */
     this.initialize = function() {
+        this.numColumns = Math.floor(this.width / this.cellSize);
+        this.numRows = Math.floor(this.height / this.cellSize);
+
         this.width = this.numColumns * this.cellSize;
         this.height = this.numRows * this.cellSize;
 
@@ -213,6 +216,17 @@ function Maze(width, height, cellSize) {
         this.finish = this.grid[0];
 
         return this;
+    };
+
+    this.reset = function(width, height, cellSize) {
+        this.width = width;
+        this.height = height;
+        this.cellSize = cellSize;
+        this.deadends = [];
+        this.history = [];
+        this.grid = [];
+
+        this.initialize();
     };
 
     /**
