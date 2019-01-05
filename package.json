@@ -9,6 +9,8 @@
   "author": "Chris Butcher",
   "license": "MIT",
   "dependencies": {
-    "p5": "^0.7.2"
+    "express": "^4.16.4",
+    "p5": "^0.7.2",
+    "pug": "^2.0.3"
   }
 }
