@@ -21,17 +21,18 @@ router.get('/configure/:name', (req, res) => {
         maxVehicles: 100,
     };
 
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(file.path)) {
         return res.redirect('/');
     }
 
-    imageSize(path, (error, size) => {
+    imageSize(file.path, (error, size) => {
         if (error) { throw error; }
 
         file.width = size.width;
         file.height = size.height;
 
         res.render('learning/configure', {
+            title: "Configure Maze",
             file,
             config,
         });
@@ -61,6 +62,7 @@ router.get('/solve/:name', (req, res) => {
         file.height = size.height;
 
         res.render('learning/solve', {
+            title: "Solving Maze",
             file
         });
     });
