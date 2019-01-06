@@ -6,7 +6,7 @@ function setup() {
         resizable: false,
         minimizable: true,
         minimizeLocation: 'right',
-        width: 220,
+        width: 280,
     });
 
     controller.initialize({

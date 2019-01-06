@@ -63,14 +63,31 @@ function Controller(width, height, cellSize) {
     };
 
     this.save = function() {
+        $.ajax({
+            url: '/save',
+            type: 'POST',
+            data: {
+                image: this.canvas.canvas.toDataURL('image/png')
+            },
+            success: (response) => {
+                console.log(response);
+            },
 
+            error: (error) => {
+                console.log(error);
+            }
+        })
     };
 
     this.start = function() {
+        if (this.canvas) {
+            this.canvas.canvas.remove();
+        }
+
         this.maze = new Maze(this.width, this.height, this.cellSize);
         this.maze.initialize();
 
-        resizeCanvas(this.maze.width, this.maze.height);
+        this.canvas = createCanvas(this.maze.width, this.maze.height);
 
         this.inputs.save.disabled = true;
 
