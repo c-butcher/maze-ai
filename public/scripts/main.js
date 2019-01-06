@@ -15,7 +15,6 @@ function setup() {
         cellSize: document.getElementById('maze-cell-size'),
         frameRate: document.getElementById('maze-frame-rate'),
         restart: document.getElementById('maze-restart'),
-        save: document.getElementById('maze-save'),
     });
 }
 

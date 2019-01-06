@@ -37,7 +37,28 @@ function Tile(row, column, size) {
 
         noStroke();
         fill(r, g, b, a);
-        rect(x, y, this.size, this.size);
+        rect(x + 5, y + 5, this.size - 10, this.size - 10);
+
+        return this;
+    };
+
+    /**
+     * Renders a highlight color for this tile.
+     *
+     * @param {number} r
+     * @param {number} g
+     * @param {number} b
+     * @param {number} a
+     *
+     * @return {Tile}
+     */
+    this.breadcrumb = function(r, g, b, a) {
+        let x = this.row * this.size;
+        let y = this.column * this.size;
+
+        noStroke();
+        fill(r, g, b, a);
+        ellipse(x + this.size / 2, y + this.size / 2, this.size / 4, this.size / 4);
 
         return this;
     };

@@ -239,6 +239,10 @@ function Maze(width, height, cellSize) {
             tile.render(this.numColumns);
         }
 
+        for (let tile of this.history) {
+            tile.breadcrumb(0, 0, 0, 100);
+        }
+
         this.start.highlight(0, 220, 0);
         this.finish.highlight(220, 0, 0);
 

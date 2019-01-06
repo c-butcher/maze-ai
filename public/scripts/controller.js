@@ -2,7 +2,7 @@ function Controller(width, height, cellSize) {
     this.width     = width;
     this.height    = height;
     this.cellSize  = cellSize;
-    this.frameRate = 90;
+    this.frameRate = 30;
     this.maze      = new Maze(width, height, cellSize);
 
     this.inputs = {
@@ -59,6 +59,8 @@ function Controller(width, height, cellSize) {
             }
         }
 
+        frameRate(this.frameRate);
+
         this.start();
     };
 
@@ -70,11 +72,11 @@ function Controller(width, height, cellSize) {
                 image: this.canvas.canvas.toDataURL('image/png')
             },
             success: (response) => {
-                console.log(response);
-            },
+                if (response.success) {
+                    console.log("Successfully Saved");
+                }
 
-            error: (error) => {
-                console.log(error);
+                setTimeout(() => { this.start(); }, 1000);
             }
         })
     };
@@ -89,15 +91,14 @@ function Controller(width, height, cellSize) {
 
         this.canvas = createCanvas(this.maze.width, this.maze.height);
 
-        this.inputs.save.disabled = true;
-
         loop();
     };
 
     this.draw = function() {
         if (!this.maze.next()) {
-            this.inputs.save.disabled = false;
             noLoop();
+
+            setTimeout(() => { this.save(); }, 100);
         }
 
         this.maze.render();
