@@ -5,6 +5,9 @@ const fs = require('fs');
 const app = express();
 const port = 3000;
 
+global.imgPath = __dirname + '/public/images/';
+global.imgURL = '/web/images/';
+
 app.use(helmet());
 app.use(express.urlencoded({extended: true, limit: '5mb'}));
 app.use(express.json());
@@ -25,7 +28,7 @@ app.post('/save', (req, res) => {
 
     let image = req.param('image').replace(/^data:image\/png;base64,/, "");
     let filename = crypto.createHash('md5').update(image).digest('hex') + ".png";
-    let filepath = __dirname + '/public/images/' + filename;
+    let filepath = global.imgPath + filename;
 
     fs.writeFileSync(filepath, image, {
         encoding: 'base64',
@@ -38,14 +41,25 @@ app.post('/save', (req, res) => {
     });
 });
 
-app.get('/list', (req, res) => {
-    res.render('index', {
-        title: 'The Maze Generator'
-    });
-});
-
 app.get('/generate', (req, res) => {
     res.render('generator');
+});
+
+app.get('/solve/:name', (req, res) => {
+    let name = req.params.name;
+    let filename = name + '.png';
+    let path = global.imgPath + filename;
+    let url = global.imgURL + filename;
+
+    if (!fs.existsSync(path)) {
+        return res.redirect('/');
+    }
+
+    return res.render('solve', {
+        name,
+        filename,
+        url
+    });
 });
 
 app.get('/', (req, res) => {
