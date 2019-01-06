@@ -1,8 +1,9 @@
 extends ../layout.pug
 
 block content
-    section(id="mazes" class="maze-list")
-        each maze in mazes
-            a(class="maze" href="solve/" + maze.name)
-                h3= maze.name
-                img(src="web/images/" + maze.filename)
+    div(class="container")
+        div(class="row")
+            each maze in mazes
+                a(class="col-lg-4 mt-4" href="learn/configure/" + maze.name)
+                    h6(class="text-center") #{maze.name}
+                    img(class="mw-100 mh=100" src="web/images/" + maze.filename)
