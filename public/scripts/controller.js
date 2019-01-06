@@ -2,7 +2,9 @@ function Controller(width, height, cellSize) {
     this.width     = width;
     this.height    = height;
     this.cellSize  = cellSize;
+    this.container = null;
     this.frameRate = 30;
+    this.canvas    = null;
     this.maze      = new Maze(width, height, cellSize);
 
     this.inputs = {
@@ -46,10 +48,15 @@ function Controller(width, height, cellSize) {
                 this.maze.reset(this.width, this.height, this.cellSize);
 
                 frameRate(this.frameRate);
-                resizeCanvas(this.maze.width, this.maze.height);
 
                 this.start();
+
+                this.canvas.resizeCanvas(this.maze.width, this.maze.height);
             }
+        }
+
+        if (inputs.container) {
+            this.container = inputs.container;
         }
 
         if (inputs.save) {
@@ -90,6 +97,7 @@ function Controller(width, height, cellSize) {
         this.maze.initialize();
 
         this.canvas = createCanvas(this.maze.width, this.maze.height);
+        this.canvas.parent(this.container);
 
         loop();
     };

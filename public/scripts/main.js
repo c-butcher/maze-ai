@@ -10,6 +10,7 @@ function setup() {
     });
 
     controller.initialize({
+        container: document.getElementById('maze-generator'),
         width: document.getElementById('maze-width'),
         height: document.getElementById('maze-height'),
         cellSize: document.getElementById('maze-cell-size'),
@@ -26,5 +27,5 @@ function draw() {
 }
 
 function updateWindow() {
-    resizeCanvas(maze.width, maze.height);
+    //resizeCanvas(maze.width, maze.height);
 }
