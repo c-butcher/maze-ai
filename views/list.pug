@@ -1,0 +1,35 @@
+html
+    head
+        title= title
+
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous")
+
+        script(type="text/javascript" src='web/p5/p5.min.js')
+        script(type="text/javascript" src='web/scripts/tile.js')
+        script(type="text/javascript" src='web/scripts/maze.js')
+        script(type="text/javascript" src='web/scripts/controller.js')
+        script(type="text/javascript" src='web/scripts/main.js')
+
+        link(type="text/css" rel="stylesheet" href="web/styles/reset.css")
+        link(type="text/css" rel="stylesheet" href="web/styles/main.css")
+
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css" integrity="sha256-AjyoyaRtnGVTywKH/Isxxu5PXI0s4CcE0BzPAX83Ppc=" crossorigin="anonymous")
+        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" integrity="sha256-sEGfrwMkIjbgTBwGLVK38BG/XwIiNC/EAG9Rzsfda6A=" crossorigin="anonymous")
+    body
+        h1= title
+
+        section(id="controller" class="controller" title="Controls")
+            label(for="maze-width") Width
+            input(id="maze-width" name="maze-width" type="number")
+
+            label(for="maze-height") Height
+            input(id="maze-height" name="maze-height" type="number")
+
+            label(for="maze-cell-size") Cell Size
+            input(id="maze-cell-size" name="maze-cell-size" type="number")
+
+            label(for="maze-frame-rate") Frame Rate
+            input(id="maze-frame-rate" name="maze-frame-rate" type="number")
+
+            button(id="maze-restart" class="btn btn-default" type="button") Generate

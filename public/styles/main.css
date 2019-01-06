@@ -40,6 +40,29 @@ h1 {
     width: 30%;
 }
 
+.maze-list {
+    width: 100%;
+    margin: 0 2%;
+}
+
+.maze-list .maze {
+    float: left;
+    max-width: 20%;
+    margin: 2%;
+}
+
+.maze-list .maze h3 {
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.maze-list .maze img {
+    margin-top: 10px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 /* Hiding the close button for jQuery modals */
 .ui-dialog-titlebar-close {
     display: none !important;

@@ -38,9 +38,35 @@ app.post('/save', (req, res) => {
     });
 });
 
-app.get('/', (req, res) => {
+app.get('/list', (req, res) => {
     res.render('index', {
         title: 'The Maze Generator'
+    });
+});
+
+app.get('/generate', (req, res) => {
+    res.render('generator');
+});
+
+app.get('/', (req, res) => {
+
+    let files = fs.readdirSync(__dirname + '/public/images/');
+
+    let mazes = [];
+    for (let file of files) {
+        let temp = file.split('.');
+        if (temp.length !== 2 || temp[1] !== 'png') {
+            continue;
+        }
+
+        mazes.push({
+            name: temp[0],
+            filename: file,
+        });
+    }
+
+    res.render('index', {
+        mazes
     });
 });
 
