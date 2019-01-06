@@ -1,21 +1,8 @@
-html
-    head
-        title Maze.AI
+extends ../layout.pug
 
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous")
-
-
-        link(type="text/css" rel="stylesheet" href="/web/styles/reset.css")
-        link(type="text/css" rel="stylesheet" href="/web/styles/main.css")
-
-        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css" integrity="sha256-AjyoyaRtnGVTywKH/Isxxu5PXI0s4CcE0BzPAX83Ppc=" crossorigin="anonymous")
-        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" integrity="sha256-sEGfrwMkIjbgTBwGLVK38BG/XwIiNC/EAG9Rzsfda6A=" crossorigin="anonymous")
-    body
-        h1 Available Mazes
-
-        section(id="mazes" class="maze-list")
-            each maze in mazes
-                a(class="maze" href="solve/" + maze.name)
-                    h3= maze.name
-                    img(src="web/images/" + maze.filename)
+block content
+    section(id="mazes" class="maze-list")
+        each maze in mazes
+            a(class="maze" href="solve/" + maze.name)
+                h3= maze.name
+                img(src="web/images/" + maze.filename)
