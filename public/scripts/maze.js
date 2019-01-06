@@ -239,8 +239,8 @@ function Maze(width, height, cellSize) {
             tile.render(this.numColumns);
         }
 
-        this.start.highlight(0, 255, 0, 150);
-        this.finish.highlight(255, 0, 0, 150);
+        this.start.highlight(0, 220, 0);
+        this.finish.highlight(220, 0, 0);
 
         return this;
     }

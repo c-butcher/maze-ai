@@ -40,3 +40,8 @@ h1 {
     font-weight: bold;
     width: 30%;
 }
+
+/* Hiding the close button for jQuery modals */
+.ui-dialog-titlebar-close {
+    display: none !important;
+}

@@ -1,13 +1,15 @@
 function Controller(width, height, cellSize) {
-    this.width    = width;
-    this.height   = height;
-    this.cellSize = cellSize;
-    this.maze     = new Maze(width, height, cellSize);
+    this.width     = width;
+    this.height    = height;
+    this.cellSize  = cellSize;
+    this.frameRate = 90;
+    this.maze      = new Maze(width, height, cellSize);
 
     this.inputs = {
         width: null,
         height: null,
         cellSize: null,
+        frameRate: null,
         restart: null,
         save: null,
     };
@@ -28,15 +30,22 @@ function Controller(width, height, cellSize) {
             this.inputs.cellSize.value = this.cellSize;
         }
 
+        if (inputs.frameRate) {
+            this.inputs.frameRate = inputs.frameRate;
+            this.inputs.frameRate.value = this.frameRate;
+        }
+
         if (inputs.restart) {
             this.inputs.restart = inputs.restart;
             this.inputs.restart.onclick = () => {
                 this.width = this.inputs.width ? parseInt(this.inputs.width.value) : this.width;
                 this.height = this.inputs.height ? parseInt(this.inputs.height.value) : this.height;
                 this.cellSize = this.inputs.cellSize ? parseInt(this.inputs.cellSize.value) : this.cellSize;
+                this.frameRate = this.inputs.frameRate ? parseInt(this.inputs.frameRate.value) : this.frameRate;
 
                 this.maze.reset(this.width, this.height, this.cellSize);
 
+                frameRate(this.frameRate);
                 resizeCanvas(this.maze.width, this.maze.height);
 
                 this.start();

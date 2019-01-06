@@ -13,6 +13,7 @@ function setup() {
         width: document.getElementById('maze-width'),
         height: document.getElementById('maze-height'),
         cellSize: document.getElementById('maze-cell-size'),
+        frameRate: document.getElementById('maze-frame-rate'),
         restart: document.getElementById('maze-restart'),
         save: document.getElementById('maze-save'),
     });
