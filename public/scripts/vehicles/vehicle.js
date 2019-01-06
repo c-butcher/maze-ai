@@ -17,11 +17,12 @@ function Vehicle(options) {
     this.velocity     = options.velocity || new p5.Vector();
     this.acceleration = options.acceleration || new p5.Vector();
     this.radius       = options.radius;
+    this.diameter     = options.radius / 2;
     this.maxforce     = options.maxForce;
     this.maxspeed     = options.maxSpeed;
     this.renderer     = options.renderer;
-    this.finished     = options.finished;
     this.color        = options.color;
+    this.factory      = options.factory;
 }
 
 Vehicle.prototype.defaults = {
@@ -30,15 +31,14 @@ Vehicle.prototype.defaults = {
     acceleration: null,
     color: 175,
     radius: 5,
+    diameter: 2.5,
     maxForce: 0.1,
     maxSpeed: 4,
-    finished: function(vehicles) {
-        vehicles.splice(vehicles.indexOf(this), 1);
-    },
+    factory: null,
     renderer: function() {
         fill(175);
         stroke(0);
-        ellipse(this.location.x + this.radius / 2, this.location.y + this.radius / 2, this.radius, this.radius);
+        ellipse(this.location.x + this.diameter, this.location.y + this.diameter, this.radius, this.radius);
     },
 };
 
@@ -47,7 +47,7 @@ Vehicle.prototype.defaults = {
  *
  * @returns {Vehicle}
  */
-Vehicle.prototype.display = function() {
+Vehicle.prototype.render = function() {
     this.renderer();
 
     return this;
@@ -94,7 +94,9 @@ Vehicle.prototype.seek = function(target) {
     desired.normalize();
 
     if (distance <= this.radius && this.velocity.mag() < 0.5) {
-        this.finished(this);
+        if (this.factory) {
+            this.factory.remove(this);
+        }
 
     } else if (distance < 100) {
         desired.mult( map(distance, 0, 100, 0, this.maxspeed) );
