@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const crypto = require('crypto');
+const imageSize = require('image-size');
 const fs = require('fs');
 const app = express();
 const port = 3000;
@@ -55,10 +56,15 @@ app.get('/solve/:name', (req, res) => {
         return res.redirect('/');
     }
 
-    return res.render('solve', {
-        name,
-        filename,
-        url
+    imageSize(path, (error, size) => {
+        return res.render('solve', {
+            file: {
+                name,
+                url,
+                width: size.width,
+                height: size.height,
+            }
+        });
     });
 });
 
