@@ -11,8 +11,14 @@ body {
     background: #FAFAFA;
 }
 
+.card-img-top {
+    width: 100%;
+    max-height: 15vw;
+    object-fit: contain
+}
+
 .page-settings-dropdown {
-    width: 250px;
+    width: 300px;
     padding: 10px;
 }
 

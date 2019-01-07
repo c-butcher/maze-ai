@@ -72,8 +72,11 @@ router.post('/save', (req, res) => {
     }
 
     let image = req.body.image.replace(/^data:image\/png;base64,/, "");
-    let filename = crypto.createHash('md5').update(image).digest('hex') + ".png";
+    let name = crypto.createHash('md5').update(image).digest('hex');
+    let filename = name + ".png";
     let filepath = global.imgPath + filename;
+    let url = global.imgURL + filename;
+    let train = '/learn/configure/' + name;
 
     fs.writeFileSync(filepath, image, {
         encoding: 'base64',
@@ -82,7 +85,10 @@ router.post('/save', (req, res) => {
 
     return res.json({
         success: true,
-        filename: filename,
+        name,
+        filename,
+        url,
+        train
     });
 });
 

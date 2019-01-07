@@ -54,6 +54,14 @@ function Controller(width, height, cellSize) {
             }
         }
 
+        if (inputs.download) {
+            this.inputs.download = inputs.download;
+        }
+
+        if (inputs.train) {
+            this.inputs.train = inputs.train;
+        }
+
         if (inputs.restart) {
             this.inputs.restart = inputs.restart;
             this.inputs.restart.onclick = () => {
@@ -62,13 +70,10 @@ function Controller(width, height, cellSize) {
                 this.cellSize = this.inputs.cellSize ? parseInt(this.inputs.cellSize.value) : this.cellSize;
                 this.frameRate = this.inputs.frameRate ? parseInt(this.inputs.frameRate.value) : this.frameRate;
 
-                this.maze.reset(this.width, this.height, this.cellSize);
-
-                frameRate(this.frameRate);
+                $(this.inputs.download).addClass('disabled');
+                $(this.inputs.train).addClass('disabled');
 
                 this.start();
-
-                this.canvas.resize(this.maze.width, this.maze.height);
             }
         }
 
@@ -96,11 +101,8 @@ function Controller(width, height, cellSize) {
                 image: this.canvas.canvas.toDataURL('image/png')
             },
             success: (response) => {
-                if (response.success) {
-                    console.log("Successfully Saved");
-                }
-
-                setTimeout(() => { this.start(); }, 1000);
+                $(this.inputs.download).attr('href', response.url).removeClass('disabled');
+                $(this.inputs.train).attr('href', response.train).removeClass('disabled');
             }
         })
     };
@@ -116,6 +118,9 @@ function Controller(width, height, cellSize) {
 
         this.canvas = createCanvas(this.maze.width, this.maze.height, 'WEBGL');
         this.canvas.parent(this.container);
+        this.canvas.resize(this.maze.width, this.maze.height);
+
+        loop();
     };
 
     this.draw = function() {

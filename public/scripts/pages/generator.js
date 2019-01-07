@@ -8,6 +8,8 @@ function setup() {
         cellSize: document.getElementById('maze-cell-size'),
         frameRate: document.getElementById('maze-frame-rate'),
         breadcrumbs: document.getElementById('maze-breadcrumbs'),
+        download: document.getElementById('maze-download'),
+        train: document.getElementById('maze-train'),
         restart: document.getElementById('maze-restart'),
     });
 }

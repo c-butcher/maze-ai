@@ -48,7 +48,9 @@ block page-menu
                     label(class="custom-control-label" for="maze-breadcrumbs" style="display: block") Show Breadcrumbs
 
                 div(class="btn-group w-100")
-                    button(id="maze-restart" class="btn btn-primary col-lg-12" type="button") Generate
+                    a(id="maze-download" class="btn btn-success col-lg-4 text-white disabled" download) Download
+                    button(id="maze-restart" class="btn btn-secondary col-lg-4 text-white" type="button") Generate
+                    a(id="maze-train" class="btn btn-primary col-lg-4 text-white disabled") Train
 
 block content
         div(class="row")
