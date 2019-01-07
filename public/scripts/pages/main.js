@@ -1,4 +1,4 @@
-let controller = new Controller(1280, 720, 40);
+let controller = new Controller(800, 600, 40);
 
 function setup() {
     controller.initialize({
