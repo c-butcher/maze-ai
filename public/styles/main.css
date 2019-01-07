@@ -11,3 +11,7 @@ body {
     width: 250px;
     padding: 10px;
 }
+
+.border-box {
+    box-sizing: border-box;
+}

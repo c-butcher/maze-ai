@@ -20,6 +20,7 @@ router.get('/', (req, res) => {
         mazes.push({
             name: temp[0],
             filename: file,
+            url: global.imgURL + file
         });
     }
 

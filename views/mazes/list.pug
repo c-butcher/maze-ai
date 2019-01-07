@@ -4,6 +4,12 @@ block content
     div(class="container")
         div(class="row")
             each maze in mazes
-                a(class="col-lg-4 mt-4" href="learn/configure/" + maze.name)
-                    h6(class="text-center") #{maze.name}
-                    img(class="mw-100 mh=100" src="web/images/" + maze.filename)
+                div(class="col-lg-4 mt-4")
+                    div(class="card col-lg-12")
+                        img(class="card-img-top mt-4" src="web/images/" + maze.filename)
+
+                        div(class="card-body")
+                            p(class="card-text text-center") #{maze.name}
+                            div(class="btn-group w-100 my-2 text-center")
+                                a(class="btn btn-light" href=maze.url download) Download
+                                a(class="btn btn-primary" href="learn/configure/" + maze.name) Train
