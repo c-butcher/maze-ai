@@ -63,7 +63,7 @@ router.post('/save', (req, res) => {
  *
  * This page generates and saves mazes.
  */
-router.get('/generate', (req, res) => {
+router.get('/generator', (req, res) => {
     res.render('mazes/generator');
 });
 

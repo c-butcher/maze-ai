@@ -3,7 +3,7 @@ function Controller(width, height, cellSize) {
     this.height      = height;
     this.cellSize    = cellSize;
     this.container   = null;
-    this.frameRate   = 15;
+    this.frameRate   = 10;
     this.breadcrumbs = false;
     this.canvas      = null;
     this.maze        = new Maze(width, height, cellSize);
@@ -116,8 +116,6 @@ function Controller(width, height, cellSize) {
 
         this.canvas = createCanvas(this.maze.width, this.maze.height, 'WEBGL');
         this.canvas.parent(this.container);
-
-        loop();
     };
 
     this.draw = function() {
