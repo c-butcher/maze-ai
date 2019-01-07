@@ -13,11 +13,19 @@ function Controller(width, height, cellSize) {
         height: null,
         cellSize: null,
         frameRate: null,
+        breadcrumbs: null,
+        continuous: null,
         restart: null,
+        download: null,
+        train: null,
         save: null,
     };
 
     this.initialize = function(inputs) {
+        if (inputs.container) {
+            this.container = inputs.container;
+        }
+
         if (inputs.width) {
             this.inputs.width = inputs.width;
             this.inputs.width.value = this.width;
@@ -54,6 +62,16 @@ function Controller(width, height, cellSize) {
             }
         }
 
+        if (inputs.continuous) {
+            this.inputs.continuous = inputs.continuous;
+            this.inputs.continuous.value = this.continuous;
+            this.inputs.continuous.checked = this.continuous;
+
+            this.inputs.continuous.onchange = () => {
+                this.continuous = this.inputs.continuous.checked;
+            }
+        }
+
         if (inputs.download) {
             this.inputs.download = inputs.download;
         }
@@ -77,10 +95,6 @@ function Controller(width, height, cellSize) {
             }
         }
 
-        if (inputs.container) {
-            this.container = inputs.container;
-        }
-
         if (inputs.save) {
             this.inputs.save = inputs.save;
             this.inputs.save.onclick = () => {
@@ -101,8 +115,13 @@ function Controller(width, height, cellSize) {
                 image: this.canvas.canvas.toDataURL('image/png')
             },
             success: (response) => {
-                $(this.inputs.download).attr('href', response.url).removeClass('disabled');
-                $(this.inputs.train).attr('href', response.train).removeClass('disabled');
+
+                if (this.continuous) {
+                    this.start();
+                } else {
+                    $(this.inputs.download).attr('href', response.url).removeClass('disabled');
+                    $(this.inputs.train).attr('href', response.train).removeClass('disabled');
+                }
             }
         })
     };

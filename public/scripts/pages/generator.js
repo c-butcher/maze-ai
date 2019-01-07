@@ -7,6 +7,7 @@ function setup() {
         height: document.getElementById('maze-height'),
         cellSize: document.getElementById('maze-cell-size'),
         frameRate: document.getElementById('maze-frame-rate'),
+        continuous: document.getElementById('maze-continuous'),
         breadcrumbs: document.getElementById('maze-breadcrumbs'),
         download: document.getElementById('maze-download'),
         train: document.getElementById('maze-train'),
