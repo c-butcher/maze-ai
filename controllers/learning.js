@@ -9,32 +9,28 @@ const fs = require('fs');
  */
 router.get('/configure/:name', (req, res) => {
     let name = req.params.name;
-    let file = {
+    let maze = {
         name: name,
         filename: name + '.png',
         path: global.imgPath + name + '.png',
         url: global.imgURL + name + '.png',
+        width: 0,
+        height: 0,
     };
 
-    let config = {
-        learningRate: 0.005,
-        maxVehicles: 100,
-    };
-
-    if (!fs.existsSync(file.path)) {
+    if (!fs.existsSync(maze.path)) {
         return res.redirect('/');
     }
 
-    imageSize(file.path, (error, size) => {
+    imageSize(maze.path, (error, size) => {
         if (error) { throw error; }
 
-        file.width = size.width;
-        file.height = size.height;
+        maze.width = size.width;
+        maze.height = size.height;
 
         res.render('learning/configure', {
             title: "Configure Maze",
-            file,
-            config,
+            maze,
         });
     })
 });

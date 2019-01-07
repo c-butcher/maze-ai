@@ -1,19 +1,20 @@
 extends ../layout.pug
 
 block append scripts
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js" integrity="sha256-FA14tBI8v+/1BtcH9XtJpcNbComBEpdawUZA6BPXRVw=" crossorigin="anonymous")
+    script(type="text/javascript" src='/web/p5/p5.min.js')
     script(src="/web/scripts/pages/configure.js")
 
 block content
-
     div(class="container")
         div(class="row mt-4")
-
             div(class="col-lg-6 offset-lg-3 float-lg-left")
-                section(id="maze-container" class="maze-container")
-                    img(class="mw-100 mh-100" src= file.url)
+                section(id="maze-container" class="maze-container" data-url= maze.url data-width= maze.width data-height= maze.height)
+                    img(class="mw-100 mh-100" src= maze.url)
 
                 section(id="configuration" class="configuration mt-4")
-                    form(method="POST" action="/learn/solve/" + file.name)
+                    form(method="POST" action="/learn/solve/" + maze.name)
                         div(class="form-row")
                             div(class="form-group col-md-4")
                                 label(for="learning-rate") Learning Rate
