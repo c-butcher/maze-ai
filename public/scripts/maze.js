@@ -258,8 +258,10 @@ function Maze(width, height, cellSize) {
         }
 
         if (this.breadcrumbs) {
+            let count = 0;
             for (let tile of this.history) {
-                tile.breadcrumb(0, 0, 0, 100);
+                tile.breadcrumb(0, 0, 0, count / this.history.length * 255);
+                count++;
             }
         }
 

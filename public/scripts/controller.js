@@ -18,7 +18,6 @@ function Controller(width, height, cellSize) {
         restart: null,
         download: null,
         train: null,
-        save: null,
     };
 
     this.initialize = function(inputs) {
@@ -95,13 +94,6 @@ function Controller(width, height, cellSize) {
             }
         }
 
-        if (inputs.save) {
-            this.inputs.save = inputs.save;
-            this.inputs.save.onclick = () => {
-                this.save();
-            }
-        }
-
         frameRate(this.frameRate);
 
         this.start();
@@ -117,7 +109,8 @@ function Controller(width, height, cellSize) {
             success: (response) => {
 
                 if (this.continuous) {
-                    this.start();
+                    setTimeout(() => { this.start(); }, 1000);
+
                 } else {
                     $(this.inputs.download).attr('href', response.url).removeClass('disabled');
                     $(this.inputs.train).attr('href', response.train).removeClass('disabled');
