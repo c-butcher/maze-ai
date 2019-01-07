@@ -1,14 +1,6 @@
 let controller = new Controller(1280, 720, 40);
 
 function setup() {
-
-    jQuery('#controller').dialog({
-        resizable: false,
-        minimizable: true,
-        minimizeLocation: 'right',
-        width: 280,
-    });
-
     controller.initialize({
         container: document.getElementById('maze-generator'),
         width: document.getElementById('maze-width'),

@@ -7,21 +7,47 @@ block append scripts
     script(type="text/javascript" src='/web/scripts/controller.js')
     script(type="text/javascript" src='/web/scripts/pages/main.js')
 
+block page-menu
+    ul(class="nav justify-content-end")
+        li(class="nav-item dropdown")
+            a(class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Settings
+            div(class="dropdown-menu dropdown-menu-right page-settings-dropdown" aria-labelledby="navbarDropdownMenuLink")
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Width
+                    input(type="number" class="form-control" id="maze-width" name="maze-width" placeholder="Width")
+                    div(class="input-group-append")
+                        div(class="input-group-text") px
+
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Height
+                    input(type="number" class="form-control" id="maze-height" name="maze-height" placeholder="Height")
+                    div(class="input-group-append")
+                        div(class="input-group-text") px
+
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Cell Size
+                    input(type="number" class="form-control" id="maze-cell-size" name="maze-cell-size" placeholder="Cell Size")
+                    div(class="input-group-append")
+                        div(class="input-group-text") px
+
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Frames
+                    input(type="number" class="form-control" id="maze-frame-rate" name="maze-frame-rate" placeholder="Frame Rate")
+                    div(class="input-group-append")
+                        div(class="input-group-text") / sec
+
+
+                div(class="btn-group col-lg-12")
+                    button(id="maze-restart" class="btn btn-primary" type="button") Generate
+
 block content
         div(class="row")
             div(class="col-lg-12")
-                section(id="maze-generator" class="my-4 text-center")
-                section(id="controller" class="controller" title="Controls")
-                    label(for="maze-width") Width
-                    input(id="maze-width" name="maze-width" type="number")
-
-                    label(for="maze-height") Height
-                    input(id="maze-height" name="maze-height" type="number")
-
-                    label(for="maze-cell-size") Cell Size
-                    input(id="maze-cell-size" name="maze-cell-size" type="number")
-
-                    label(for="maze-frame-rate") Frame Rate
-                    input(id="maze-frame-rate" name="maze-frame-rate" type="number")
-
-                    button(id="maze-restart" class="btn btn-default" type="button") Generate
+                section(id="maze-generator" class="text-center my-4")

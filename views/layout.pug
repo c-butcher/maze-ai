@@ -9,19 +9,24 @@ html(lang="en")
 
         block scripts
             script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous")
-            script(src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous")
             script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha256-63ld7aiYP6UxBifJWEzz87ldJyVnETUABZAYs5Qcsmc=" crossorigin="anonymous")
 
         block styles
-            link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css" integrity="sha256-AjyoyaRtnGVTywKH/Isxxu5PXI0s4CcE0BzPAX83Ppc=" crossorigin="anonymous")
-            link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" integrity="sha256-sEGfrwMkIjbgTBwGLVK38BG/XwIiNC/EAG9Rzsfda6A=" crossorigin="anonymous")
             link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha256-azvvU9xKluwHFJ0Cpgtf0CYzK7zgtOznnzxV4924X1w=" crossorigin="anonymous")
-
             link(type="text/css" rel="stylesheet" href="/web/styles/main.css")
     body
         div(id="container" class="container-fluid")
             block navigation
-                include menu.pug
+                div(class="row")
+                    nav(class="navbar navbar-expand-lg navbar-light bg-light col-lg-12")
+                        a(class="navbar-brand" href="/") Maze.AI
+                        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+                            span(class="navbar-toggler-icon")
+
+                        div(class="collapse navbar-collapse " id="navbarSupportedContent")
+                            ul(class="navbar-nav mr-auto")
+                                include menu.pug
+                            block page-menu
 
             block content
             block footer
