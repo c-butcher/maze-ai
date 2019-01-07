@@ -3,6 +3,32 @@ const crypto = require('crypto');
 const fs = require('fs');
 
 /**
+ * Split an array into chunks.
+ *
+ * @param {array} array
+ * @param {number} columns
+ */
+function splitArray(array, columns = 3) {
+    let chunked = [];
+
+    if (array.length <= columns) {
+        for (i = 0; i < array.length; i++) {
+            chunked.push(array.slice(i, 1));
+        }
+
+    } else {
+
+        let size = Math.ceil(array.length / columns);
+        for (i = 0; i <= columns; i++) {
+            let start = i * size;
+            chunked.push(array.slice(i * size, start + size));
+        }
+    }
+
+    return chunked;
+}
+
+/**
  * List Mazes
  *
  * This page displays a list of available mazes.
@@ -23,6 +49,8 @@ router.get('/', (req, res) => {
             url: global.imgURL + file
         });
     }
+
+    mazes = splitArray(mazes, 3);
 
     res.render('mazes/list', {
         title: 'List of Mazes',
