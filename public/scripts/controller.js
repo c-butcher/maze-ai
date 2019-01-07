@@ -3,7 +3,7 @@ function Controller(width, height, cellSize) {
     this.height      = height;
     this.cellSize    = cellSize;
     this.container   = null;
-    this.frameRate   = 10;
+    this.frameRate   = 15;
     this.breadcrumbs = false;
     this.canvas      = null;
     this.maze        = new Maze(width, height, cellSize);
