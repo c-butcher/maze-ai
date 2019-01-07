@@ -63,6 +63,13 @@ function Maze(width, height, cellSize) {
     this.numRows = Math.floor(this.height / this.cellSize);
 
     /**
+     * Tells whether to render the history as breadcrumbs.
+     *
+     * @type {boolean}
+     */
+    this.breadcrumbs = false;
+
+    /**
      * Looks at all the neighbors for the supplied tile, and then selects
      * one at random.
      *
@@ -230,6 +237,17 @@ function Maze(width, height, cellSize) {
     };
 
     /**
+     * Tells whether we are showing the breadcrumbs.
+     *
+     * @param {boolean} isVisible
+     * @returns {Maze}
+     */
+    this.showBreadcrumbs = function(isVisible) {
+        this.breadcrumbs = isVisible;
+        return this;
+    };
+
+    /**
      * Render the tiles for the maze.
      *
      * @return {Maze}
@@ -239,8 +257,10 @@ function Maze(width, height, cellSize) {
             tile.render(this.numColumns);
         }
 
-        for (let tile of this.history) {
-            tile.breadcrumb(0, 0, 0, 100);
+        if (this.breadcrumbs) {
+            for (let tile of this.history) {
+                tile.breadcrumb(0, 0, 0, 100);
+            }
         }
 
         this.start.highlight(0, 220, 0);

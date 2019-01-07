@@ -7,6 +7,7 @@ function setup() {
         height: document.getElementById('maze-height'),
         cellSize: document.getElementById('maze-cell-size'),
         frameRate: document.getElementById('maze-frame-rate'),
+        breadcrumbs: document.getElementById('maze-breadcrumbs'),
         restart: document.getElementById('maze-restart'),
     });
 }
@@ -18,6 +19,10 @@ function draw() {
     controller.draw();
 }
 
-function updateWindow() {
-    //resizeCanvas(maze.width, maze.height);
-}
+$(() => {
+    $('#page-settings').on('click', function (event) {
+        $(this).parent().toggleClass('show');
+        $(this).toggleClass('open');
+        $(this).next().toggleClass('show');
+    });
+});

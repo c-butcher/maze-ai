@@ -1,11 +1,12 @@
 function Controller(width, height, cellSize) {
-    this.width     = width;
-    this.height    = height;
-    this.cellSize  = cellSize;
-    this.container = null;
-    this.frameRate = 10;
-    this.canvas    = null;
-    this.maze      = new Maze(width, height, cellSize);
+    this.width       = width;
+    this.height      = height;
+    this.cellSize    = cellSize;
+    this.container   = null;
+    this.frameRate   = 10;
+    this.breadcrumbs = false;
+    this.canvas      = null;
+    this.maze        = new Maze(width, height, cellSize);
 
     this.inputs = {
         width: null,
@@ -35,6 +36,22 @@ function Controller(width, height, cellSize) {
         if (inputs.frameRate) {
             this.inputs.frameRate = inputs.frameRate;
             this.inputs.frameRate.value = this.frameRate;
+
+            this.inputs.frameRate.onchange = () => {
+                this.frameRate = parseInt(this.inputs.frameRate.value);
+                frameRate(this.frameRate);
+            }
+        }
+
+        if (inputs.breadcrumbs) {
+            this.inputs.breadcrumbs = inputs.breadcrumbs;
+            this.inputs.breadcrumbs.value = this.breadcrumbs;
+            this.inputs.breadcrumbs.checked = this.breadcrumbs;
+
+            this.inputs.breadcrumbs.onchange = () => {
+                this.breadcrumbs = this.inputs.breadcrumbs.checked;
+                this.maze.showBreadcrumbs(this.breadcrumbs);
+            }
         }
 
         if (inputs.restart) {
@@ -95,6 +112,7 @@ function Controller(width, height, cellSize) {
 
         this.maze = new Maze(this.width, this.height, this.cellSize);
         this.maze.initialize();
+        this.maze.showBreadcrumbs(this.breadcrumbs);
 
         this.canvas = createCanvas(this.maze.width, this.maze.height, 'WEBGL');
         this.canvas.parent(this.container);

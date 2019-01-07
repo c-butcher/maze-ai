@@ -10,8 +10,8 @@ block append scripts
 block page-menu
     ul(class="nav justify-content-end")
         li(class="nav-item dropdown")
-            a(class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Settings
-            div(class="dropdown-menu dropdown-menu-right page-settings-dropdown" aria-labelledby="navbarDropdownMenuLink")
+            a(class="nav-link dropdown-toggle" href="#" id="page-settings" aria-haspopup="true" aria-expanded="false") Settings
+            div(class="dropdown-menu dropdown-menu-right page-settings-dropdown" aria-labelledby="page-settings")
                 div(class="input-group mb-2 mr-sm-2")
                     div(class="input-group-prepend")
                         div(class="input-group-text") Width
@@ -43,9 +43,12 @@ block page-menu
                     div(class="input-group-append")
                         div(class="input-group-text") / sec
 
+                div(class="custom-control custom-checkbox my-2")
+                    input(type="checkbox" class="custom-control-input" id="maze-breadcrumbs")
+                    label(class="custom-control-label" for="maze-breadcrumbs" style="display: block") Show Breadcrumbs
 
-                div(class="btn-group col-lg-12")
-                    button(id="maze-restart" class="btn btn-primary" type="button") Generate
+                div(class="btn-group w-100")
+                    button(id="maze-restart" class="btn btn-primary col-lg-12" type="button") Generate
 
 block content
         div(class="row")
