@@ -1,14 +1,46 @@
-let startColor = '#00AA00';
-let finishColor = '#AA0000';
-let wallColor = '#000000';
 let canvas = null;
 let img = null;
 let width = 0;
 let height = 0;
 let url = null;
+let colors = [];
+
+function rgbToHex (r, g, b) {
+    let hex = '#';
+
+    let red = r.toString(16);
+    let green = g.toString(16);
+    let blue = b.toString(16);
+
+    hex += red.length < 2 ? '0' + red : red;
+    hex += green.length < 2 ? '0' + green : green;
+    hex += blue.length < 2 ? '0' + blue : blue;
+
+    return hex;
+}
+
+/**
+ * Toggle the visibility of the loading screen.
+ *
+ * @param {boolean} isVisible
+ */
+function showLoadingScreen(isVisible = null) {
+    if (isVisible === null) {
+        $('#loading-screen').toggle();
+
+    } else if (isVisible) {
+        $('#loading-screen').show();
+
+    } else {
+        $('#loading-screen').hide()
+    }
+}
+
 
 
 function preload() {
+    showLoadingScreen(true);
+
     url = $('#maze-container').data('url');
     width = $('#maze-container').data('width');
     height = $('#maze-container').data('height');
@@ -26,7 +58,7 @@ function setup() {
     // Load the Pixels
     loadPixels();
 
-    let colors = {};
+    colors = {};
     for (let w = 0; w < width; w++) {
         for (let h = 0; h < height; h++) {
             let pixel = get(w, h);
@@ -41,27 +73,59 @@ function setup() {
         }
     }
 
-
     colors = Object.entries(colors)
                    .reduce((accumulator, value, index, array) => {
+                       value = value[1];
+                       value.id    = value.color;
+                       value.color = rgbToHex(value.color[0], value.color[1], value.color[2]);
+                       value.html  = `<span class="color" style="background: ${value.color}; padding: 10px; margin-right: 10px; vertical-align: middle; display: inline-block;"></span><span style="display: inline-block">${value.color.toUpperCase()}</span>`;
+
                        accumulator.push(value);
                        return accumulator
                    }, [])
                    .sort((a,b) => {
-                       if (a[1].count === b[1].count) {
+                       if (a.count === b.count) {
                            return 0;
                        }
-                       return b[1].count - a[1].count;
+                       return b.count - a.count;
                    });
 
-    // Second most popular color is wall
-    wallColor = colors[1].color;
+    $(() => {
 
-    // First color that is not popular is start
-    wallColor = colors[1].color;
+        $(".color-select").select2({
+            data: colors,
+            placeholder: "Select One",
+            theme: 'bootstrap',
+            templateResult: (result) => {
+                return $(result.html);
+            },
+            templateSelection: (result) => {
+                return $(result.html);
+            },
+            matcher: (params, data) => {
+                if ($.trim(params.term).length < 1) {
+                    return data;
+                }
 
-    // Second color that is not popular is finish
-    wallColor = colors[1].color;
+                if (typeof data.color === 'undefined') {
+                    return null;
+                }
+
+                if (data.color.indexOf(params.term.toLowerCase()) > -1) {
+                    let modifiedData = $.extend({}, data, true);
+                    modifiedData.color += ' (matched)';
+
+                    // You can return modified objects from here
+                    // This includes matching the `children` how you want in nested data sets
+                    return modifiedData;
+                }
+
+                return null;
+            }
+        });
+    });
+
+    showLoadingScreen(false);
 
     noLoop();
 }

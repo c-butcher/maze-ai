@@ -2,6 +2,7 @@ extends ../layout.pug
 
 block append scripts
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js" integrity="sha256-FA14tBI8v+/1BtcH9XtJpcNbComBEpdawUZA6BPXRVw=" crossorigin="anonymous")
     script(type="text/javascript" src='/web/p5/p5.min.js')
     script(src="/web/scripts/pages/configure.js")
@@ -18,11 +19,28 @@ block content
                         div(class="form-row")
                             div(class="form-group col-md-4")
                                 label(for="learning-rate") Learning Rate
-                                input(type="number" id="learning-rate" name="learning-rate" class="form-control" step="0.01" max="1" min="0.01" placeholder="Learning Rate" value="0.01")
+                                input(type="number" id="learning-rate" name="learning-rate" class="form-control" step="0.01" max="1" min="0.01" placeholder="Learning Rate" value="0.05")
 
                             div(class="form-group col-md-4")
-                                label(for="vehicles") Vehicles
-                                input(type="number" id="vehicles" name="vehicles" class="form-control" step="5" max="250" min="10" placeholder="Vehicles" value="50")
+                                label(for="learning-rate") Iterations
+                                input(type="number" id="iterations" name="iterations" class="form-control" step="10" max="1000000" min="10" placeholder="Iterations" value="500")
+
+                            div(class="form-group col-md-4")
+                                label(for="vehicles") Vehicles per Iteration
+                                input(type="number" id="vehicles" name="vehicles" class="form-control" step="5" max="250" min="10" placeholder="Vehicles" value="20")
+
+                        div(class="form-row")
+                            div(class="form-group col-md-4")
+                                label(for="start-color") Start Color
+                                select(id="start-color" name="start-color" class="color-select form-control")
+
+                            div(class="form-group col-md-4")
+                                label(for="finish-color") Finish Color
+                                select(id="finish-color" name="finish-color" class="color-select form-control")
+
+                            div(class="form-group col-md-4")
+                                label(for="wall-color") Floor Color
+                                select(id="wall-color" name="floor-color" class="color-select form-control")
 
                         div(class="form-row")
                             div(class="form-group col-md-12")
