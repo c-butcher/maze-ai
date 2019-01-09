@@ -7,9 +7,8 @@ html
         script(src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.14.1/tf.min.js" integrity="sha256-PXLQ2ReJfUnoPsTUQBN5deMhfwt+gck70WvmIRWNFeQ=" crossorigin="anonymous")
 
         script(type="text/javascript" src='/web/p5/p5.min.js')
-        script(type="text/javascript" src='/web/scripts/vehicles/vehicle.js')
-        script(type="text/javascript" src='/web/scripts/vehicles/vehicle-builder.js')
-        script(type="text/javascript" src='/web/scripts/vehicles/vehicle-factory.js')
+        script(type="text/javascript" src='/web/scripts/learning/genes.js')
+        script(type="text/javascript" src='/web/scripts/learning/smart-vehicle.js')
         script(type="text/javascript" src='/web/scripts/solve.js')
 
         link(type="text/css" rel="stylesheet" href="/web/styles/reset.css")
@@ -18,5 +17,5 @@ html
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css" integrity="sha256-AjyoyaRtnGVTywKH/Isxxu5PXI0s4CcE0BzPAX83Ppc=" crossorigin="anonymous")
         link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" integrity="sha256-sEGfrwMkIjbgTBwGLVK38BG/XwIiNC/EAG9Rzsfda6A=" crossorigin="anonymous")
     body
-        h1 Solve MazeGenerator
+        h1 Solve Maze
         div(id="maze-container" class="maze-container" data-url= file.url data-width= file.width data-height= file.height)

@@ -18,26 +18,7 @@ router.get('/configure/:name', (req, res) => {
         }
 
         res.render('learning/configure', {
-            title: "Configure Maze",
-            maze,
-        });
-    });
-});
-
-/**
- * Attempt to solve the puzzle.
- */
-router.get('/solve/:name', (req, res) => {
-    Maze.findOne({name: req.params.name}, (error, maze) => {
-        if (error) { throw error; }
-
-        let path = imgPath + name + '.png';
-        if (!maze || !fs.existsSync(path)) {
-            return res.redirect('/');
-        }
-
-        res.render('learning/solve', {
-            title: "Solving Maze",
+            title: "Training Maze",
             maze,
         });
     });
