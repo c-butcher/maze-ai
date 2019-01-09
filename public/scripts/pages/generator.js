@@ -21,11 +21,3 @@ function draw() {
 
     controller.draw();
 }
-
-$(() => {
-    $('#page-settings').on('click', function (event) {
-        $(this).parent().toggleClass('show');
-        $(this).toggleClass('open');
-        $(this).next().toggleClass('show');
-    });
-});
