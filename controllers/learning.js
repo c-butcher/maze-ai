@@ -8,7 +8,7 @@ const Maze = require('../models/maze');
  * to solve the puzzle.
  *
  */
-router.get('/configure/:name', (req, res) => {
+router.get('/solve/:name', (req, res) => {
     Maze.findOne({name: req.params.name}, (error, maze) => {
         if (error) { throw error; }
 
@@ -17,7 +17,7 @@ router.get('/configure/:name', (req, res) => {
             return res.redirect('/');
         }
 
-        res.render('learning/configure', {
+        res.render('learn/solve', {
             title: "Training Maze",
             maze,
         });

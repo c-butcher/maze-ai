@@ -37,7 +37,7 @@ router.post('/save', (req, res) => {
     let filename = name + ".png";
     let filepath = global.imgPath + filename;
     let download = global.imgURL + filename;
-    let train = '/learn/configure/' + name;
+    let train = '/learn/solve/' + name;
 
     fs.writeFileSync(filepath, image, {
         encoding: 'base64',
