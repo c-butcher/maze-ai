@@ -29,12 +29,14 @@ function Tile(row, column, size) {
      * @return {Tile}
      */
     this.highlight = function(color) {
-        let x = this.row * this.size;
-        let y = this.column * this.size;
+        if (color) {
+            let x = this.row * this.size;
+            let y = this.column * this.size;
 
-        noStroke();
-        fill(color);
-        rect(x + 5, y + 5, this.size - 10, this.size - 10);
+            noStroke();
+            fill(color);
+            rect(x + 5, y + 5, this.size - 10, this.size - 10);
+        }
 
         return this;
     };

@@ -8,7 +8,8 @@ const schema = mongoose.Schema({
     startColor: 'string',
     finishColor: 'string',
     floorColor: 'string',
-    wallColor: 'string'
+    wallColor: 'string',
+    pathToFinish: 'array'
 });
 
 module.exports = schema;

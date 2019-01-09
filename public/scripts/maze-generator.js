@@ -49,6 +49,13 @@ function MazeGenerator(width, height, cellSize) {
     this.deadends = [];
 
     /**
+     * Contains the correct path to the finish line.
+     *
+     * @type {Array}
+     */
+    this.pathToFinish = [];
+
+    /**
      * The total amount of columns that we have.
      *
      * @type {number}
@@ -186,6 +193,15 @@ function MazeGenerator(width, height, cellSize) {
 
         } else if (this.history.length > 0) {
             if (this.deadend) {
+
+                this.pathToFinish = [];
+                for (let i = 0; i < this.history.length; i++) {
+                    this.pathToFinish.push([
+                        this.history[i].row,
+                        this.history[i].column
+                    ]);
+                }
+
                 this.deadends.push(this.start.index(this.numRows));
                 this.deadend = false;
             }
@@ -229,6 +245,7 @@ function MazeGenerator(width, height, cellSize) {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
+        this.pathToFinish = [];
         this.deadends = [];
         this.history = [];
         this.grid = [];
@@ -257,7 +274,7 @@ function MazeGenerator(width, height, cellSize) {
             tile.render(this.numColumns);
         }
 
-        if (this.breadcrumbs) {
+        if (this.breadcrumbs && this.history.length > 0) {
             let count = 0;
             for (let tile of this.history) {
                 tile.breadcrumb(0, 0, 0, count / this.history.length * 255);

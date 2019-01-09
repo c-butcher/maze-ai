@@ -116,7 +116,8 @@ function Controller(width, height, cellSize) {
                 startColor: this.startColor,
                 finishColor: this.finishColor,
                 floorColor: this.floorColor,
-                wallColor: this.wallColor
+                wallColor: this.wallColor,
+                pathToFinish: this.maze.pathToFinish
             },
             success: (response) => {
 

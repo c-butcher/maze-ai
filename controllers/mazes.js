@@ -47,6 +47,14 @@ router.post('/save', (req, res) => {
     req.body.name = name;
     req.body.image = filename;
 
+    // Apparently the number were turned to string when they were POST'ed.
+    // So we need to convert them back to integers. Something is wrong with this.
+    // TODO: Figure out why number are being turned into strings and try to avoid it.
+    for (let i = 0; i < req.body.pathToFinish.length; i++) {
+        req.body.pathToFinish[i][0] = parseInt(req.body.pathToFinish[i][0]);
+        req.body.pathToFinish[i][1] = parseInt(req.body.pathToFinish[i][1]);
+    }
+
     const maze = new Maze(req.body);
 
     maze.save((error) => {
