@@ -1,5 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
+const database = require('./db');
+
 const app = express();
 const port = 3000;
 
@@ -7,6 +9,7 @@ global.imgPath = __dirname + '/public/images/';
 global.imgURL = '/web/images/';
 
 app.use(helmet());
+app.use(database());
 app.use(express.urlencoded({extended: true, limit: '5mb'}));
 app.use(express.json());
 

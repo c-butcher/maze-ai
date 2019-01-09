@@ -59,7 +59,7 @@ router.get('/', (req, res) => {
 });
 
 /**
- * Save Maze Image
+ * Save MazeGenerator Image
  *
  * This is an AJAX method for saving a maze image.
  */
@@ -93,7 +93,7 @@ router.post('/save', (req, res) => {
 });
 
 /**
- * Generate Maze
+ * Generate MazeGenerator
  *
  * This page generates and saves mazes.
  */

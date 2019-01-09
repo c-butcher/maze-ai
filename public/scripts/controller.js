@@ -6,7 +6,7 @@ function Controller(width, height, cellSize) {
     this.frameRate   = 10;
     this.breadcrumbs = false;
     this.canvas      = null;
-    this.maze        = new Maze(width, height, cellSize);
+    this.maze        = new MazeGenerator(width, height, cellSize);
 
     this.inputs = {
         width: null,
@@ -124,7 +124,7 @@ function Controller(width, height, cellSize) {
             this.canvas.canvas.remove();
         }
 
-        this.maze = new Maze(this.width, this.height, this.cellSize);
+        this.maze = new MazeGenerator(this.width, this.height, this.cellSize);
         this.maze.initialize();
         this.maze.showBreadcrumbs(this.breadcrumbs);
 

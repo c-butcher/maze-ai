@@ -1,4 +1,4 @@
-function Maze(width, height, cellSize) {
+function MazeGenerator(width, height, cellSize) {
 
     /**
      * The width of the maze.
@@ -203,7 +203,7 @@ function Maze(width, height, cellSize) {
     /**
      * Creates the grid in preparation for generating the maze.
      *
-     * @returns {Maze}
+     * @returns {MazeGenerator}
      */
     this.initialize = function() {
         this.numColumns = Math.floor(this.width / this.cellSize);
@@ -240,7 +240,7 @@ function Maze(width, height, cellSize) {
      * Tells whether we are showing the breadcrumbs.
      *
      * @param {boolean} isVisible
-     * @returns {Maze}
+     * @returns {MazeGenerator}
      */
     this.showBreadcrumbs = function(isVisible) {
         this.breadcrumbs = isVisible;
@@ -250,7 +250,7 @@ function Maze(width, height, cellSize) {
     /**
      * Render the tiles for the maze.
      *
-     * @return {Maze}
+     * @return {MazeGenerator}
      */
     this.render = function() {
         for (let tile of this.grid) {

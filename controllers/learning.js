@@ -29,7 +29,7 @@ router.get('/configure/:name', (req, res) => {
         maze.height = size.height;
 
         res.render('learning/configure', {
-            title: "Configure Maze",
+            title: "Configure MazeGenerator",
             maze,
         });
     })
@@ -58,7 +58,7 @@ router.get('/solve/:name', (req, res) => {
         file.height = size.height;
 
         res.render('learning/solve', {
-            title: "Solving Maze",
+            title: "Solving MazeGenerator",
             file
         });
     });
