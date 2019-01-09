@@ -11,41 +11,52 @@ block content
     div(class="container")
         div(class="row mt-4")
             div(class="col-lg-6 offset-lg-3 float-lg-left")
-                section(id="maze-container" class="maze-container" data-url= maze.url data-width= maze.width data-height= maze.height)
-                    img(class="mw-100 mh-100" src= maze.url)
+                section(id="maze-container" class="maze-container text-center" data-url= imgURL + maze.image data-width= maze.width data-height= maze.height)
+                    img(class="mw-100 mh-100" src= imgURL + maze.image)
 
                 section(id="configuration" class="configuration mt-4")
                     form(method="POST" action="/learn/solve/" + maze.name)
                         div(class="form-row")
-                            div(class="form-group col-md-4")
+                            div(class="form-group col-md-3")
                                 label(for="learning-rate") Learning Rate
                                 input(type="number" id="learning-rate" name="learning-rate" class="form-control" step="0.01" max="1" min="0.01" placeholder="Learning Rate" value="0.05")
 
-                            div(class="form-group col-md-4")
+                            div(class="form-group col-md-3")
                                 label(for="learning-rate") Iterations
                                 input(type="number" id="iterations" name="iterations" class="form-control" step="10" max="1000000" min="10" placeholder="Iterations" value="500")
 
-                            div(class="form-group col-md-4")
-                                label(for="vehicles") Vehicles per Iteration
+                            div(class="form-group col-md-3")
+                                label(for="vehicles") Vehicles
                                 input(type="number" id="vehicles" name="vehicles" class="form-control" step="5" max="250" min="10" placeholder="Vehicles" value="20")
 
-                        div(class="form-row")
-                            div(class="form-group col-md-4")
-                            label(for="learning-rate") Node Size
-                            input(type="number" id="node-size" name="learning-rate" class="form-control" step="1" max="9999" min="1" placeholder="Node Size" value="5")
+                            div(class="form-group col-md-3")
+                                label(for="learning-rate") Node Size
+                                input(type="number" id="node-size" name="learning-rate" class="form-control" step="1" max="9999" min="1" placeholder="Node Size" value= maze.nodeSize)
 
                         div(class="form-row")
                             div(class="form-group col-md-4")
                                 label(for="start-color") Start Color
                                 select(id="start-color" name="start-color" class="color-select form-control")
+                                    option(value= maze.startColor data-color= maze.startColor selected) #{maze.startColor}
+                                    option(value= maze.finishColor data-color= maze.finishColor)
+                                    option(value= maze.floorColor data-color= maze.floorColor)
+                                    option(value= maze.wallColor data-color= maze.wallColor)
 
                             div(class="form-group col-md-4")
                                 label(for="finish-color") Finish Color
                                 select(id="finish-color" name="finish-color" class="color-select form-control")
+                                    option(value= maze.startColor data-color= maze.startColor) #{maze.startColor}
+                                    option(value= maze.finishColor data-color= maze.finishColor selected)
+                                    option(value= maze.floorColor data-color= maze.floorColor)
+                                    option(value= maze.wallColor data-color= maze.wallColor)
 
                             div(class="form-group col-md-4")
                                 label(for="wall-color") Floor Color
                                 select(id="wall-color" name="floor-color" class="color-select form-control")
+                                    option(value= maze.startColor data-color= maze.startColor) #{maze.startColor}
+                                    option(value= maze.finishColor data-color= maze.finishColor)
+                                    option(value= maze.floorColor data-color= maze.floorColor selected)
+                                    option(value= maze.wallColor data-color= maze.wallColor)
 
                         div(class="form-row")
                             div(class="form-group col-md-12")

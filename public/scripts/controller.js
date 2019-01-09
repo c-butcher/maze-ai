@@ -2,10 +2,15 @@ function Controller(width, height, cellSize) {
     this.width       = width;
     this.height      = height;
     this.cellSize    = cellSize;
+    this.startColor  = '#00AA00';
+    this.finishColor = '#AA0000';
+    this.floorColor  = '#FFFFFF';
+    this.wallColor   = '#000000';
     this.container   = null;
     this.frameRate   = 10;
     this.breadcrumbs = false;
     this.canvas      = null;
+    this.isSaving    = false;
     this.maze        = new MazeGenerator(width, height, cellSize);
 
     this.inputs = {
@@ -104,7 +109,14 @@ function Controller(width, height, cellSize) {
             url: '/save',
             type: 'POST',
             data: {
-                image: this.canvas.canvas.toDataURL('image/png')
+                image: this.canvas.canvas.toDataURL('image/png'),
+                width: this.maze.width,
+                height: this.maze.height,
+                nodeSize: this.cellSize,
+                startColor: this.startColor,
+                finishColor: this.finishColor,
+                floorColor: this.floorColor,
+                wallColor: this.wallColor
             },
             success: (response) => {
 
@@ -112,7 +124,7 @@ function Controller(width, height, cellSize) {
                     setTimeout(() => { this.start(); }, 1000);
 
                 } else {
-                    $(this.inputs.download).attr('href', response.url).removeClass('disabled');
+                    $(this.inputs.download).attr('href', response.download).removeClass('disabled');
                     $(this.inputs.train).attr('href', response.train).removeClass('disabled');
                 }
             }
@@ -120,6 +132,8 @@ function Controller(width, height, cellSize) {
     };
 
     this.start = function() {
+        this.isSaving = false;
+
         if (this.canvas) {
             this.canvas.canvas.remove();
         }
@@ -139,7 +153,9 @@ function Controller(width, height, cellSize) {
         if (!this.maze.next()) {
             noLoop();
 
-            setTimeout(() => { this.save(); }, 100);
+            if (!this.isSaving) {
+                this.isSaving = setTimeout(() => { this.save(); }, 100);
+            }
         }
 
         this.maze.render();

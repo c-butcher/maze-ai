@@ -1,60 +1,21 @@
 const router = require('express').Router();
 const crypto = require('crypto');
 const fs = require('fs');
-
-/**
- * Split an array into chunks.
- *
- * @param {array} array
- * @param {number} columns
- */
-function splitArray(array, columns = 3) {
-    let chunked = [];
-
-    if (array.length <= columns) {
-        for (i = 0; i < array.length; i++) {
-            chunked.push(array.slice(i, 1));
-        }
-
-    } else {
-
-        let size = Math.ceil(array.length / columns);
-        for (i = 0; i <= columns; i++) {
-            let start = i * size;
-            chunked.push(array.slice(i * size, start + size));
-        }
-    }
-
-    return chunked;
-}
+const Maze = require('../models/maze');
 
 /**
  * List Mazes
  *
  * This page displays a list of available mazes.
  */
-router.get('/', (req, res) => {
-    let files = fs.readdirSync(global.imgPath);
+router.get('/', (req, res, next) => {
+    Maze.find({}, (error, mazes) => {
+        if (error ) { return next(error); }
 
-    let mazes = [];
-    for (let file of files) {
-        let temp = file.split('.');
-        if (temp.length !== 2 || temp[1] !== 'png') {
-            continue;
-        }
-
-        mazes.push({
-            name: temp[0],
-            filename: file,
-            url: global.imgURL + file
+        res.render('mazes/list', {
+            title: 'List of Mazes',
+            mazes
         });
-    }
-
-    mazes = splitArray(mazes, 3);
-
-    res.render('mazes/list', {
-        title: 'List of Mazes',
-        mazes
     });
 });
 
@@ -75,7 +36,7 @@ router.post('/save', (req, res) => {
     let name = crypto.createHash('md5').update(image).digest('hex');
     let filename = name + ".png";
     let filepath = global.imgPath + filename;
-    let url = global.imgURL + filename;
+    let download = global.imgURL + filename;
     let train = '/learn/configure/' + name;
 
     fs.writeFileSync(filepath, image, {
@@ -83,12 +44,20 @@ router.post('/save', (req, res) => {
         flag: 'w+'
     });
 
-    return res.json({
-        success: true,
-        name,
-        filename,
-        url,
-        train
+    req.body.name = name;
+    req.body.image = filename;
+
+    const maze = new Maze(req.body);
+
+    maze.save((error) => {
+        if (error) throw error;
+
+        return res.json({
+            success: true,
+            maze,
+            download,
+            train,
+        });
     });
 });
 

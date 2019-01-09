@@ -24,19 +24,16 @@ function Tile(row, column, size) {
     /**
      * Renders a highlight color for this tile.
      *
-     * @param {number} r
-     * @param {number} g
-     * @param {number} b
-     * @param {number} a
+     * @param {p5.Color|string} color
      *
      * @return {Tile}
      */
-    this.highlight = function(r, g, b, a) {
+    this.highlight = function(color) {
         let x = this.row * this.size;
         let y = this.column * this.size;
 
         noStroke();
-        fill(r, g, b, a);
+        fill(color);
         rect(x + 5, y + 5, this.size - 10, this.size - 10);
 
         return this;

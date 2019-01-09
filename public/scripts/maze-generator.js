@@ -265,8 +265,8 @@ function MazeGenerator(width, height, cellSize) {
             }
         }
 
-        this.start.highlight(0, 220, 0);
-        this.finish.highlight(220, 0, 0);
+        this.start.highlight('#00AA00');
+        this.finish.highlight('#AA0000');
 
         return this;
     }

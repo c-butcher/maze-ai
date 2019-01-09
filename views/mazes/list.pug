@@ -4,18 +4,36 @@ block content
     div(class="container")
         div(class="row")
             if mazes.length > 0
-                each column in mazes
-                    div(class="col-lg-4")
-                        each maze in column
-                            div(class="card col-lg-12 mt-4")
-                                img(class="card-img-top mt-4" src="web/images/" + maze.filename)
+                div(class="card-columns")
+                    each maze in mazes
+                        div(class="card mt-4")
+                            img(class="card-img-top px-4 mt-4" src="web/images/" + maze.image)
 
-                                div(class="card-body")
-                                    p(class="card-text text-center") #{maze.name}
-                                    div(class="btn-group w-100 my-2 text-center")
-                                        a(class="btn btn-secondary" href=maze.url download) Download
-                                        a(class="btn btn-primary" href="learn/configure/" + maze.name) Train
+                            div(class="card-body")
+                                p(class="card-text text-center") #{maze.name}
+                                p(class="card-text text-center") #{maze.width} x #{maze.height}
+
+                                div(class="row")
+                                    div(class="col-lg-3 text-center")
+                                        span(class="px-3 py-3" style="display: inline-block; border: 1px solid black; background: " + maze.startColor title= maze.startColor)
+                                        p(class="card-text") Start
+
+                                    div(class="col-lg-3 text-center")
+                                        span(class="px-3 py-3" style="display: inline-block; border: 1px solid black; background: " + maze.finishColor title= maze.finishColor)
+                                        p(class="card-text") Finish
+
+                                    div(class="col-lg-3 text-center")
+                                        span(class="px-3 py-3" style="display: inline-block; border: 1px solid black; background: " + maze.floorColor title= maze.floorColor)
+                                        p(class="card-text") Floor
+
+                                    div(class="col-lg-3 text-center")
+                                        span(class="px-3 py-3" style="display: inline-block; border: 1px solid black; background: " + maze.wallColor title= maze.wallColor)
+                                        p(class="card-text") Wall
+
+                                div(class="btn-group w-100 my-2 text-center")
+                                    a(class="btn btn-secondary" href="web/images/" + maze.image download) Download
+                                    a(class="btn btn-primary" href="learn/configure/" + maze.name) Train
             else
-                    h5(class="col-lg-12 text-center my-4") There are no mazes.
-                    h5(class="col-lg-12 text-center")
-                        a(href="/generator") Generate some!
+                h5(class="col-lg-12 text-center my-4") There are no mazes.
+                h5(class="col-lg-12 text-center")
+                    a(href="/generator") Generate some!

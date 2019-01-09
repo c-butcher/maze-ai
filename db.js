@@ -1,23 +1,20 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 
 function database(options) {
-    options = Object.create(_defaults, options);
+    options = Object.assign(_defaults, options);
 
     return function(req, res, next) {
-        MongoClient.connect(`mongodb://${options.host}:${options.port}/${options.database}`, { useNewUrlParser: true }, function (err, db) {
-            if (err) { throw err; }
-
-            req.db = db;
-
+        req.db = mongoose.connect(`mongodb://${options.host}:${options.port}/${options.name}`, {useNewUrlParser: true}, (error, database) => {
+            if (error) { throw error; }
             next();
         });
     };
 }
 
 let _defaults = {
+    name: 'default',
     host: 'localhost',
     port: 27017,
-    database: null,
 };
 
 module.exports = database;
