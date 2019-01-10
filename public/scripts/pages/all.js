@@ -25,7 +25,6 @@ $(() => {
             placeholder: "Select One",
             theme: 'bootstrap',
             templateResult: (result) => {
-                console.log(result.html);
                 return $(result.html);
             },
             templateSelection: (result) => {

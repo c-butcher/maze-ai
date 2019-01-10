@@ -1,13 +1,22 @@
-let vehicle = null;
+let canvas = null;
+let maze = null;
 
 function setup() {
-    createCanvas(400, 300);
-    vehicle = new SmartVehicle();
+    maze = {
+        image: null,
+        url: $('#maze-container').data('url'),
+        width: $('#maze-container').data('width'),
+        height: $('#maze-container').data('height')
+    };
+
+    canvas = createCanvas(maze.width, maze.height);
+    canvas.parent('#maze-container');
+
+    maze.image = loadImage(maze.url);
 }
 
 function draw() {
     background(0);
 
-    vehicle.update();
-    vehicle.show();
+    image(maze.image, 0, 0, width, height);
 }

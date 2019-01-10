@@ -3,10 +3,15 @@ extends ../layout.pug
 block append scripts
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous")
+
     script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js" integrity="sha256-FA14tBI8v+/1BtcH9XtJpcNbComBEpdawUZA6BPXRVw=" crossorigin="anonymous")
     script(type="text/javascript" src='/web/p5/p5.min.js')
-    script(src="/web/scripts/pages/all.js")
-    script(src="/web/scripts/pages/solve.js")
+    script(type="text/javascript" src="/web/scripts/genetics/gene.js")
+    script(type="text/javascript" src="/web/scripts/genetics/dna-strain.js")
+    script(type="text/javascript" src="/web/scripts/genetics/organism.js")
+    script(type="text/javascript" src="/web/scripts/genetics/society.js")
+    script(type="text/javascript" src="/web/scripts/pages/all.js")
+    script(type="text/javascript" src="/web/scripts/pages/solve.js")
 
 block page-menu
     ul(class="nav justify-content-end")
@@ -74,6 +79,5 @@ block page-menu
 block content
     div(class="container")
         div(class="row mt-4")
-            div(class="col-lg-6 offset-lg-3 float-lg-left")
+            div(class="col-lg-12")
                 section(id="maze-container" class="maze-container text-center" data-url= imgURL + maze.image data-width= maze.width data-height= maze.height)
-                img(class="mw-100 mh-100" src= imgURL + maze.image)
