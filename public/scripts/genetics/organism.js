@@ -5,6 +5,8 @@ function Organism(options) {
     }
 
     this.isAlive     = options.isAlive;
+    this.isDead      = options.isDead;
+    this.fitness     = options.fitness;
     this.procreate   = options.procreate;
     this.progress    = options.progress;
     this.regress     = options.regress;
@@ -17,7 +19,7 @@ function Organism(options) {
 /**
  * The default options for an organism.
  *
- * @type {{ isAlive: (function(): number), dna: DNAStrain, procreate: (function(): DNAStrain), regress: (function(): void), progress: (function(): void), render: (function(): void), mutateRate: number, traits: {}}}
+ * @type {{ isDead: boolean, isAlive: (function(): number), dna: DNAStrain, procreate: (function(): DNAStrain), regress: (function(): void), progress: (function(): void), render: (function(): void), mutateRate: number, traits: {}}}
  *
  * @private
  */
@@ -25,6 +27,7 @@ Organism.prototype._defaults = {
     dna: null,
     traits: {},
     mutateRate: 0.01,
+    isDead: false,
 
     /**
      * Tells whether the organism is alive, or not?
@@ -58,6 +61,15 @@ Organism.prototype._defaults = {
         }
 
         return new DNAStrain(parent1._materials, parent1.getLength(), babyGenes);
+    },
+
+    /**
+     * Calculates the fitness of our organism by making sure it has the values we want.
+     *
+     * @params {object} values The values that we want our organism to have.
+     */
+    fitness: function(values) {
+
     },
 
     /**

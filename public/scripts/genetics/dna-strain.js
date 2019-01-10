@@ -8,7 +8,7 @@
  * @constructor
  */
 function DNAStrain(materials, length = 10, genes = []) {
-    if (Array.isArray(materials)) {
+    if (!Array.isArray(materials)) {
         throw new Error('DNA Strain requires a list of known genetic materials.');
     }
 
@@ -118,7 +118,7 @@ DNAStrain.prototype.current = function() {
         return false;
     }
 
-    return this._genes[this._current].duplicate();
+    return this._genes[this._current];
 };
 
 /**
@@ -131,10 +131,20 @@ DNAStrain.prototype.setGenes = function(genes) {
         throw new Error('DNA Strain requires an array of genes.');
     }
 
-    if (genes.length !== this._length) {
-        throw new Error(`DNA Strain requires exactly ${this._length} genes.`);
+    // We are throwing an error when there are too many genes, mostly because I don't
+    // know how to choose which genes to keep and which to get rid of.
+    if (genes.length > this._length) {
+        throw new Error(`DNA Strain requires no more than ${this._length} genes.`);
     }
 
+    // When we don't have enough genes, then we can fill it up with random values.
+    else if (genes.length < this._length) {
+        for (let i = genes.length; i < this._length; i++) {
+            genes[i] = new Gene(this._materials);
+        }
+    }
+
+    // Clear this strains old genes, and set the new genes.
     this._genes = [];
     for (let i = 0; i < genes.length; i++) {
         if (!(genes[i] instanceof Gene)) {
