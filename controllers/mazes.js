@@ -9,7 +9,7 @@ const Maze = require('../models/maze');
  * This page displays a list of available mazes.
  */
 router.get('/', (req, res, next) => {
-    Maze.find({}, (error, mazes) => {
+    Maze.find({}, { _id: false }, (error, mazes) => {
         if (error ) { return next(error); }
 
         res.render('mazes/list', {
