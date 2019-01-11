@@ -32,6 +32,7 @@ function setup() {
                 canvas.parent('#maze-container');
 
                 society = new MazeSolver(maze);
+                society.populate();
             });
         }
     });
@@ -40,8 +41,6 @@ function setup() {
 function draw() {
     if (society) {
         background(society.maze.image);
-        if (!society.advance()) {
-            society.repopulate();
-        }
+        society.advance();
     }
 }
