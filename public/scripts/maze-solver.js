@@ -1,19 +1,43 @@
 function MazeSolver(maze) {
     this.population = [];
     this.graveyard = [];
-    this.populationSize = 20;
+    this.populationSize = 1;
     this.generation = 0;
     this.length = (maze.width / maze.nodeSize) * (maze.height / maze.nodeSize);
     this.maze = maze;
+    this.start = createVector();
+    this.finish = createVector();
+
+    this.findStartAndFinish();
 
     for (let i = 0; i < this.populationSize; i++) {
         this.population.push(new Organism(this.createDNA()));
     }
 }
 
+MazeSolver.prototype.findStartAndFinish = function() {
+    for (let row = 0; row <= this.maze.width / this.maze.nodeSize; row++) {
+        for (let column = 0; column <= this.maze.height / this.maze.nodeSize; column++) {
+            let x = (row * this.maze.nodeSize) - this.maze.nodeSize / 2;
+            let y = (column * this.maze.nodeSize) - this.maze.nodeSize / 2;
+
+            let color = this.maze.image.get(x, y);
+
+            if (this.maze.startColor.matches(color)) {
+                this.start = createVector(x, y);
+
+            } else if (this.maze.finishColor.matches(color)) {
+                this.finish = createVector(x, y);
+            }
+        }
+    }
+};
+
 MazeSolver.prototype.advance = function() {
     for (let i = 0; i < this.population.length; i++) {
         if (this.isAlive(this.population[i])) {
+            this.fitness(this.population[i]);
+
             this.population[i].update();
             this.population[i].render();
         } else {
@@ -62,8 +86,20 @@ MazeSolver.prototype.repopulate = function() {
     }
 };
 
-MazeSolver.prototype.fitness = function(maze) {
+MazeSolver.prototype.fitness = function(organism) {
+    if (organism.isAtPosition(organism.target)) {
+        let x = ((organism.position.x + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1;
+        let y = ((organism.position.y + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1;
 
+        let position = organism.dna.getCurrentNumber();
+
+        if (this.maze.pathToFinish[position] === [x, y]) {
+            organism.fitness += position / this.maze.pathToFinish.length;
+
+        } else {
+            organism.fitness += position / this.maze.pathToFinish.length;
+        }
+    }
 };
 
 MazeSolver.prototype.materials = {
@@ -102,4 +138,17 @@ MazeSolver.prototype.materials = {
 
         return materials[Math.floor(Math.random() * materials.length)];
     }
+};
+
+
+p5.Color.prototype.matches = function(color) {
+    if (Array.isArray(color)) {
+        return this.levels.toString() === color.toString();
+    }
+
+    if (color instanceof p5.Color) {
+        return this.levels.toString() === color.levels.toString();
+    }
+
+    return false;
 };

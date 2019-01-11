@@ -74,3 +74,12 @@ DNAStrain.prototype.next = function() {
 DNAStrain.prototype.current = function() {
     return this.genes[this.pointer];
 };
+
+DNAStrain.prototype.getCurrentNumber = function() {
+    return this.pointer;
+};
+
+
+DNAStrain.prototype.getLength = function () {
+    return this.length;
+};

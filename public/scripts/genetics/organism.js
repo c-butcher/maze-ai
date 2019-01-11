@@ -1,4 +1,4 @@
-function Organism(map) {
+function Organism(dna) {
     this.dna = dna;
     this.position = createVector(20, 20);
     this.velocity = createVector(Math.random(), Math.random());
