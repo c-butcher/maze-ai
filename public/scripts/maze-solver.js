@@ -2,6 +2,7 @@ function MazeSolver(maze) {
     this.population = [];
     this.graveyard = [];
     this.populationSize = 200;
+    this.totalOrganisms = 0;
     this.generation = 0;
     this.length = (maze.width / maze.nodeSize) * (maze.height / maze.nodeSize);
     this.maze = maze;
@@ -49,6 +50,13 @@ MazeSolver.prototype.advance = function() {
         }
     }
 
+    fill(0);
+    textSize(16);
+    stroke(255);
+    strokeWeight(8);
+    textAlign(CENTER, CENTER);
+    text("Generation: " + this.generation, width / 2, height / 2);
+
     return this.population.length > 0;
 };
 
@@ -79,9 +87,26 @@ MazeSolver.prototype.isAlive = function(organism) {
 
 MazeSolver.prototype.populate = function() {
     if (this.population.length < this.populationSize) {
-        let baby = this.mate(this.fittest, this.fittest);
+        let fittest = [];
+        let lastFitness = 0;
+        for (let i = 0; i < this.population.length; i++) {
+            if (this.population[i].fitness > lastFitness) {
+                fittest.push(this.population[i]);
+            }
+        }
+
+        let index = Math.floor((fittest.length / 3) * 2);
+        let topThirdOfPopulation = fittest.slice(index);
+
+        let parentOne = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
+        let parentTwo = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
+
+        let baby = this.mate(parentOne, parentTwo);
         this.population.push(baby);
     }
+
+    this.totalOrganisms++;
+    this.generation = Math.floor(this.totalOrganisms / this.populationSize);
 
     setTimeout(() => {
         this.populate();
