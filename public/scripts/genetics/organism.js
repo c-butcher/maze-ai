@@ -1,11 +1,13 @@
-function Organism(dna) {
-    this.dna = dna;
-    this.position = createVector(20, 20);
-    this.velocity = createVector(Math.random(), Math.random());
-    this.target = this.position;
-    this.size = 7;
-    this.stepDistance = 40;
-    this.fitness = 0;
+function Organism(options) {
+    options = Object.assign({}, this._defaults, options);
+
+    this.dna = options.dna;
+    this.position = options.position;
+    this.velocity = options.velocity;
+    this.target = options.position;
+    this.size = options.size;
+    this.stepDistance = options.stepDistance;
+    this.fitness = options.fitness;
 }
 
 Organism.prototype.update = function() {
@@ -16,6 +18,16 @@ Organism.prototype.update = function() {
     }
 
     this.position.add(this.velocity);
+};
+
+Organism.prototype._defaults = {
+    dna: null,
+    position: new p5.Vector(),
+    velocity: new p5.Vector(),
+    target: null,
+    size: 5,
+    stepDistance: 40,
+    fitness: 0,
 };
 
 Organism.prototype.isAtPosition = function(target) {

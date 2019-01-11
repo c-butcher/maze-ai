@@ -6,12 +6,18 @@ function MazeSolver(maze) {
     this.generation = 0;
     this.length = (maze.width / maze.nodeSize) * (maze.height / maze.nodeSize);
     this.maze = maze;
-    this.fittest = new Organism(this.createDNA());
     this.releaseTime = 500;
     this.start = createVector();
     this.finish = createVector();
 
     this.findStartAndFinish();
+    this.fittest = new Organism({
+        dna: this.createDNA(),
+        position: this.start.copy(),
+        velocity: createVector(),
+        stepDistance: this.maze.nodeSize,
+        size: Math.round(this.maze.nodeSize / 4)
+    });
 }
 
 MazeSolver.prototype.findStartAndFinish = function() {
@@ -53,7 +59,7 @@ MazeSolver.prototype.advance = function() {
     fill(0);
     textSize(16);
     stroke(255);
-    strokeWeight(8);
+    strokeWeight(4);
     textAlign(CENTER, CENTER);
     text("Generation: " + this.generation, width / 2, height / 2);
 
@@ -77,7 +83,13 @@ MazeSolver.prototype.mate = function(organism1, organism2) {
 
     let strain = new DNAStrain(this.materials.all(), this.length, baby);
 
-    return new Organism(strain);
+    return new Organism({
+        dna: strain,
+        position: this.start.copy(),
+        velocity: createVector(),
+        stepDistance: this.maze.nodeSize,
+        size: Math.round(this.maze.nodeSize / 4)
+    });
 };
 
 MazeSolver.prototype.isAlive = function(organism) {
@@ -95,14 +107,25 @@ MazeSolver.prototype.populate = function() {
             }
         }
 
-        let index = Math.floor((fittest.length / 3) * 2);
-        let topThirdOfPopulation = fittest.slice(index);
+        if (fittest.length < 1) {
+            this.population.push(new Organism({
+                dna: this.createDNA(),
+                position: this.start.copy(),
+                velocity: createVector(),
+                stepDistance: this.maze.nodeSize,
+                size: Math.round(this.maze.nodeSize / 4)
+            }));
 
-        let parentOne = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
-        let parentTwo = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
+        } else {
+            let index = Math.floor((fittest.length / 3) * 2);
+            let topThirdOfPopulation = fittest.slice(index);
 
-        let baby = this.mate(parentOne, parentTwo);
-        this.population.push(baby);
+            let parentOne = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
+            let parentTwo = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
+
+            let baby = this.mate(parentOne, parentTwo);
+            this.population.push(baby);
+        }
     }
 
     this.totalOrganisms++;
