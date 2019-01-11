@@ -20,7 +20,6 @@ function setup() {
     $.ajax({
         url: "/fetch/" + name,
         success: function(response) {
-            console.log(response);
             maze = response.maze;
             maze.startColor = hexToColor(maze.startColor);
             maze.finishColor = hexToColor(maze.finishColor);
@@ -31,8 +30,6 @@ function setup() {
                 maze.image = img;
                 canvas = createCanvas(maze.width, maze.height);
                 canvas.parent('#maze-container');
-
-                console.log(maze);
 
                 society = new MazeSolver(maze);
             });

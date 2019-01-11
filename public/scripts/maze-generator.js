@@ -211,9 +211,6 @@ function MazeGenerator(width, height, cellSize) {
                         this.finish.row,
                         this.finish.column,
                     ]);
-
-                    console.log(this.finish);
-                    console.log(this.pathToFinish);
                 }
 
                 this.deadend = false;
