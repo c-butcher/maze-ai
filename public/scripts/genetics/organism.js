@@ -5,11 +5,13 @@ function Organism(dna) {
     this.target = this.position;
     this.size = 10;
     this.stepDistance = 40;
+    this.fitness = 0;
 }
 
 Organism.prototype.update = function() {
     if (this.isAtPosition(this.target) && this.dna.next()) {
         this.velocity = this.dna.current();
+        this.position = this.target;
         this.target = this.position.copy().add(this.velocity.copy().mult(this.stepDistance));
     }
 
@@ -22,7 +24,7 @@ Organism.prototype.mate = function(partner) {
 
 Organism.prototype.isAtPosition = function(target) {
     let distance = this.position.dist(target);
-    return distance < this.velocity.x + this.velocity.y;
+    return distance < 2;
 };
 
 Organism.prototype.render = function() {

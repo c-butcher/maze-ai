@@ -1,7 +1,8 @@
 function MazeSolver(maze) {
     this.population = [];
     this.graveyard = [];
-    this.populationSize = 1;
+    this.populationSize = 200;
+    this.mutationRate = 0.01;
     this.generation = 0;
     this.length = (maze.width / maze.nodeSize) * (maze.height / maze.nodeSize);
     this.maze = maze;
@@ -35,9 +36,11 @@ MazeSolver.prototype.findStartAndFinish = function() {
 
 MazeSolver.prototype.advance = function() {
     for (let i = 0; i < this.population.length; i++) {
-        if (this.isAlive(this.population[i])) {
+        if (this.population[i].isAtPosition(this.population[i].target)) {
             this.fitness(this.population[i]);
+        }
 
+        if (this.isAlive(this.population[i])) {
             this.population[i].update();
             this.population[i].render();
         } else {
@@ -59,20 +62,35 @@ MazeSolver.prototype.createDNA = function() {
 };
 
 MazeSolver.prototype.mate = function(organism1, organism2) {
-    if (this.length !== dna.length) {
+    if (organism1.dna.length !== organism2.dna.length) {
         throw new Error("Cannot cross two DNA strains with different lengths.");
     }
 
+    let dna1 = organism1.dna;
+    let dna2 = organism2.dna;
+
+    let baby = [];
     let diverged = false;
     for (let i = 0; i < this.length; i++) {
-        if (!diverged) {
+        if (dna1.get(i) === dna2.get(i)) {
+            baby.push(dna1.get(i));
+            diverged = true;
 
+        } else if (diverged) {
+            diverged = false;
+            if (baby.pop()) {
+                i--;
+                baby.push(this.materials.next(baby[i-1]));
+            }
+
+        } else {
+            baby.push(this.materials.next(baby[i-1]));
         }
     }
 
-    if (diverged) {
+    let dna = new DNAStrain(this.materials.all(), this.length, baby);
 
-    }
+    return new Organism(dna);
 };
 
 MazeSolver.prototype.isAlive = function(organism) {
@@ -81,24 +99,41 @@ MazeSolver.prototype.isAlive = function(organism) {
 };
 
 MazeSolver.prototype.repopulate = function() {
-    for (let i = 0; i < this.populationSize; i++) {
-        this.population.push(new Organism(this.createDNA()));
+    let pool = [];
+    // Add organisms to the gene pool.
+
+    this.graveyard.splice(0, Math.floor(this.graveyard.length / 2));
+    for (let organism of this.graveyard) {
+        let donations = organism.fitness * 100;
+        for (let sperm = 0; sperm < donations; sperm++) {
+            pool.push(organism);
+        }
     }
+
+    this.population = [];
+    for (let i = 0; i < this.populationSize; i++) {
+        let parentOne = pool[Math.floor(Math.random() * pool.length)];
+        let parentTwo = pool[Math.floor(Math.random() * pool.length)];
+
+        let baby = this.mate(parentOne, parentTwo);
+
+        this.population.push(baby);
+    }
+
+    this.graveyard = [];
+    this.generation++;
 };
 
 MazeSolver.prototype.fitness = function(organism) {
-    if (organism.isAtPosition(organism.target)) {
-        let x = ((organism.position.x + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1;
-        let y = ((organism.position.y + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1;
+    let x = Math.round(((organism.position.x + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
+    let y = Math.round(((organism.position.y + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
 
-        let position = organism.dna.getCurrentNumber();
+    let position = organism.dna.getCurrentNumber();
+    if (this.maze.pathToFinish[position].toString() === [x, y].toString()) {
+        organism.fitness += position / this.maze.pathToFinish.length;
 
-        if (this.maze.pathToFinish[position] === [x, y]) {
-            organism.fitness += position / this.maze.pathToFinish.length;
-
-        } else {
-            organism.fitness += position / this.maze.pathToFinish.length;
-        }
+    } else {
+        organism.fitness -= position / this.maze.pathToFinish.length;
     }
 };
 

@@ -83,3 +83,26 @@ DNAStrain.prototype.getCurrentNumber = function() {
 DNAStrain.prototype.getLength = function () {
     return this.length;
 };
+
+
+DNAStrain.prototype.get = function(index) {
+    if (index >= this.genes.length) {
+        throw new Error("Attempting to get a non-existent gene from a DNA strain.");
+    }
+
+    return this.genes[index];
+};
+
+
+
+DNAStrain.prototype.set = function(index, material) {
+    if (this.materials.indexOf(material) < 0) {
+        throw new Error('Attempting to assign a material that is not part of the strain.');
+    }
+
+    if (index >= this.genes.length) {
+        throw new Error("Attempting to set a non-existent gene in a DNA strain.");
+    }
+
+    return this.genes[index];
+};
