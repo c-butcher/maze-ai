@@ -88,32 +88,6 @@ MazeSolver.prototype.populate = function() {
     }, this.releaseTime);
 };
 
-MazeSolver.prototype.repopulate = function() {
-    let pool = [];
-
-    // Add organisms to the gene pool.
-    this.graveyard.splice(0, Math.floor((this.graveyard.length / 3) * 2));
-    for (let organism of this.graveyard) {
-        let donations = organism.fitness * 100;
-        for (let sperm = 0; sperm < donations; sperm++) {
-            pool.push(organism);
-        }
-    }
-
-    this.population = [];
-    for (let i = 0; i < this.populationSize; i++) {
-        let parentOne = pool[Math.floor(Math.random() * pool.length)];
-        let parentTwo = pool[Math.floor(Math.random() * pool.length)];
-
-        let baby = this.mate(parentOne, parentTwo);
-
-        this.population.push(baby);
-    }
-
-    this.graveyard = [];
-    this.generation++;
-};
-
 MazeSolver.prototype.fitness = function(organism) {
     let x = Math.round(((organism.position.x + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
     let y = Math.round(((organism.position.y + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
