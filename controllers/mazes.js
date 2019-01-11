@@ -20,6 +20,30 @@ router.get('/', (req, res, next) => {
 });
 
 /**
+ * List Mazes
+ *
+ * This page displays a list of available mazes.
+ */
+router.get('/fetch/:name', (req, res, next) => {
+    Maze.findOne({name: req.params.name}, (error, maze) => {
+        if (error) { next(error) }
+
+        let path = imgPath + req.params.name + '.png';
+        if (!maze || !fs.existsSync(path)) {
+            return res.json({
+                success: false,
+                maze: null,
+            });
+        }
+
+        res.json({
+            success: true,
+            maze
+        })
+    });
+});
+
+/**
  * Save MazeGenerator Image
  *
  * This is an AJAX method for saving a maze image.

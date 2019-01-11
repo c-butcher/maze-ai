@@ -9,7 +9,7 @@ const Maze = require('../models/maze');
  *
  */
 router.get('/solve/:name', (req, res) => {
-    Maze.findOne({name: req.params.name}, { _id: false }, (error, maze) => {
+    Maze.findOne({name: req.params.name}, (error, maze) => {
         if (error) { throw error; }
 
         let path = imgPath + req.params.name + '.png';
@@ -19,7 +19,7 @@ router.get('/solve/:name', (req, res) => {
 
         res.render('learn/solve', {
             title: "Training Maze",
-            maze,
+            maze: maze
         });
     });
 });

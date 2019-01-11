@@ -11,7 +11,6 @@ block append scripts
     script(type="text/javascript" src="/web/scripts/maze-solver.js")
     script(type="text/javascript" src="/web/scripts/pages/all.js")
     script(type="text/javascript" src="/web/scripts/pages/solve.js")
-    script.maze= "let maze = " + maze
 
 block page-menu
     ul(class="nav justify-content-end")
@@ -80,4 +79,4 @@ block content
     div(class="container")
         div(class="row mt-4")
             div(class="col-lg-12")
-                section(id="maze-container" class="maze-container text-center" data-url= imgURL + maze.image data-width= maze.width data-height= maze.height data-start-color= maze.startColor data-finish-color= maze.finishColor data-floor-color= maze.floorColor data-wall-color = maze.wallColor)
+                section(id="maze-container" class="maze-container text-center" data-name= maze.name)
