@@ -4,6 +4,7 @@ function Controller(width, height, cellSize) {
     this.cellSize    = cellSize;
     this.startColor  = '#00AA00';
     this.finishColor = '#AA0000';
+    this.finishColor = '#AA0000';
     this.floorColor  = '#FFFFFF';
     this.wallColor   = '#000000';
     this.container   = null;

@@ -39,14 +39,11 @@ function MazeGenerator(width, height, cellSize) {
     this.history = [];
 
     /**
-     * List of the grid indexes for all the dead-ends that we've created.
+     * List of all the dead-ends that have been created, along with the route to the dead-end.
      *
-     * We grab the dead-end with the highest index in order to figure out
-     * where the finish line should be.
-     *
-     * @type {Array}
+     * @type {Map}
      */
-    this.deadends = [];
+    this.deadends = new Map();
 
     /**
      * Contains the correct path to the finish line.
@@ -193,24 +190,36 @@ function MazeGenerator(width, height, cellSize) {
 
         } else if (this.history.length > 0) {
             if (this.deadend) {
+                let index = this.start.index(this.numRows);
+                this.deadends.set(index, this.history.slice());
 
-                this.pathToFinish = [];
-                for (let i = 0; i < this.history.length; i++) {
+                // Figure out which dead-end is the farthest.
+                let farthestDeadEnd = Math.max(...this.deadends.keys());
+                if (index === farthestDeadEnd) {
+                    this.finish = this.grid[farthestDeadEnd];
+                    this.pathToFinish = [];
+
+                    let path = this.deadends.get(farthestDeadEnd);
+                    for (let i = 0; i < path.length; i++) {
+                        this.pathToFinish.push([
+                            path[i].row,
+                            path[i].column
+                        ]);
+                    }
+
                     this.pathToFinish.push([
-                        this.history[i].row,
-                        this.history[i].column
+                        this.finish.row,
+                        this.finish.column,
                     ]);
+
+                    console.log(this.finish);
+                    console.log(this.pathToFinish);
                 }
 
-                this.deadends.push(this.start.index(this.numRows));
                 this.deadend = false;
             }
 
             this.start = this.history.pop();
-        }
-
-        if (this.deadends.length > 0) {
-            this.finish = this.grid[Math.max(...this.deadends)];
         }
 
         return this.start !== this.grid[0];
@@ -245,8 +254,7 @@ function MazeGenerator(width, height, cellSize) {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
-        this.pathToFinish = [];
-        this.deadends = [];
+        this.deadends = new Map();
         this.history = [];
         this.grid = [];
 
