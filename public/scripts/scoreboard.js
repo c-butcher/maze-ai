@@ -1,6 +1,6 @@
 function Scoreboard (player) {
     this.player = player;
-    this.maze = player._maze;
+    this.maze = player.getMaze();
 }
 
 Scoreboard.prototype.initialize = function() {

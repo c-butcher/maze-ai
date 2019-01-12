@@ -39,6 +39,15 @@ Player.prototype._defaults = {
 };
 
 /**
+ * Returns an instance of the maze.
+ *
+ * @returns {Player._defaults.maze|{}|*|null}
+ */
+Player.prototype.getMaze = function() {
+    return this._maze;
+};
+
+/**
  * Figure out the start and finish points for the maze.
  */
 Player.prototype.findStartAndFinish  = function() {
@@ -101,14 +110,16 @@ Player.prototype.calculateExtraMoves = function() {
 /**
  * Calculate the players score.
  *
+ * Score = 100 Percent - Attempts - Percent of Extra Moves
+ *
  * @returns {*}
  */
 Player.prototype.calculateScore = function() {
     this._score = 100 - this._attempt;
 
-    let extraMoves = this.calculateExtraMoves() / 2;
-    if (extraMoves > 0) {
-        this._score -= (extraMoves / (this._maze.pathToFinish.length - 1) * 100).toFixed(1);
+    if (this.calculateExtraMoves() > 0) {
+        this._score = ((this._maze.pathToFinish.length - 1) / (this._history.length - 1) * 100).toFixed(1);
+        this._score -= this._attempt;
     }
 
     return this._score;
