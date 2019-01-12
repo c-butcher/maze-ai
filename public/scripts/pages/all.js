@@ -53,3 +53,38 @@ $(() => {
         });
     }
 });
+
+
+/**
+ * Converts a hexadecimal color value to a p5.Color object.
+ *
+ * @param {string} value
+ *
+ * @returns {p5.Color}
+ */
+function hexToColor(value) {
+    let hexes = value.replace('#', '').match(/.{1,2}/g);
+    let digits = unhex(hexes);
+
+    return color(...digits);
+}
+
+
+/**
+ * Extending the p5.Color object so it includes a p5.Color.match() method
+ * which tells whether two colors are equal.
+ *
+ * @param color
+ * @returns {boolean}
+ */
+p5.Color.prototype.matches = function(color) {
+    if (Array.isArray(color)) {
+        return this.levels.toString() === color.toString();
+    }
+
+    if (color instanceof p5.Color) {
+        return this.levels.toString() === color.levels.toString();
+    }
+
+    return false;
+};

@@ -1,12 +1,6 @@
-let canvas = null;
-
-/**
- *
- * @type {MazeSolver|null}
- */
-let society = null;
-
+let player = null;
 let maze = null;
+let isReady = false;
 
 function setup() {
     let name = $('#maze-container').data('name');
@@ -24,16 +18,33 @@ function setup() {
                 canvas = createCanvas(maze.width, maze.height);
                 canvas.parent('#maze-container');
 
-                society = new MazeSolver(maze);
-                society.populate();
+                player = new MazePlayer({
+                    maze: maze,
+                });
+
+                isReady = true;
             });
         }
     });
 }
 
 function draw() {
-    if (society) {
-        background(society.maze.image);
-        society.advance();
+    background(0);
+
+    if (isReady) {
+        image(maze.image, 0, 0);
+
+        player.update();
+        player.render();
+
+        if (player.isFinished()) {
+            scoreboard.render();
+        }
+    }
+}
+
+function keyPressed() {
+    if (!player.isMoving()) {
+        player.move(key);
     }
 }

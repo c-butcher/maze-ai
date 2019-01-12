@@ -1,0 +1,18 @@
+extends ../layout.pug
+
+block append scripts
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous")
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js" integrity="sha256-FA14tBI8v+/1BtcH9XtJpcNbComBEpdawUZA6BPXRVw=" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.14.2/tf.min.js" integrity="sha256-6E1cAFd6i2sREr5VE9NIrDfCodyUEC2gHfoDsW+sONA=" crossorigin="anonymous")
+    script(type="text/javascript" src='/web/p5/p5.min.js')
+    script(type="text/javascript" src="/web/scripts/maze-player.js")
+    script(type="text/javascript" src="/web/scripts/pages/all.js")
+    script(type="text/javascript" src="/web/scripts/pages/play.js")
+
+block content
+    div(class="container")
+        div(class="row mt-4")
+            div(class="col-lg-12")
+                section(id="maze-container" class="maze-container text-center" data-name= maze.name)

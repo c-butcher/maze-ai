@@ -189,15 +189,3 @@ MazeSolver.prototype.materials = {
     }
 };
 
-
-p5.Color.prototype.matches = function(color) {
-    if (Array.isArray(color)) {
-        return this.levels.toString() === color.toString();
-    }
-
-    if (color instanceof p5.Color) {
-        return this.levels.toString() === color.levels.toString();
-    }
-
-    return false;
-};
