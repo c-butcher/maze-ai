@@ -75,7 +75,7 @@ MazeSolver.prototype.createDNA = function() {
     return new DNAStrain(this.materials.all(), this.length, genes);
 };
 
-MazeSolver.prototype.mate = function(organism1, organism2) {
+MazeSolver.prototype.mate = function() {
     let baby = this.fittest.dna.genes.slice();
     for (let i = this.fittest.dna.getCurrentNumber(); i < this.fittest.dna.genes.length; i++) {
         baby[i] = this.materials.next(baby[i - 1]);
@@ -141,11 +141,11 @@ MazeSolver.prototype.fitness = function(organism) {
     let y = Math.round(((organism.position.y + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
 
     let position = organism.dna.getCurrentNumber();
-    if (this.maze.pathToFinish[position].toString() === [x, y].toString()) {
+    if (this.maze.pathToFinish[position] && this.maze.pathToFinish[position].toString() === [x, y].toString()) {
         organism.fitness += position / this.maze.pathToFinish.length;
 
     } else {
-        organism.fitness -= position / this.maze.pathToFinish.length;
+        organism.fitness -= (position / this.maze.pathToFinish.length) / 3;
     }
 
     return organism.fitness;
