@@ -1,9 +1,26 @@
 let player = null;
 let maze = null;
 let isReady = false;
+let scoreboard = null;
+
+/**
+ * Disables the page from scrolling when the arrow keys are used.
+ * This makes it so we can play our game without affecting the browsers page position.
+ */
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
 
 function setup() {
+
     let name = $('#maze-container').data('name');
+    $('body').keypress(function(event) {
+        event.preventDefault();
+    });
+
     $.ajax({
         url: "/fetch/" + name,
         success: function(response) {
@@ -18,9 +35,12 @@ function setup() {
                 canvas = createCanvas(maze.width, maze.height);
                 canvas.parent('#maze-container');
 
-                player = new MazePlayer({
+                player = new Player({
                     maze: maze,
                 });
+
+                scoreboard = new Scoreboard(player);
+                scoreboard.initialize();
 
                 isReady = true;
             });
@@ -37,8 +57,10 @@ function draw() {
         player.update();
         player.render();
 
+        scoreboard.render();
+
         if (player.isFinished()) {
-            scoreboard.render();
+            noLoop();
         }
     }
 }

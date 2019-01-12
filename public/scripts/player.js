@@ -1,4 +1,4 @@
-function MazePlayer(options = {}) {
+function Player(options = {}) {
     options = Object.assign({}, this._defaults, options);
 
     this._maze = options.maze;
@@ -21,7 +21,7 @@ function MazePlayer(options = {}) {
     this._history  = [this._start.copy()];
 }
 
-MazePlayer.prototype._defaults = {
+Player.prototype._defaults = {
     maze: {},
     size: null,
     score: 0,
@@ -38,7 +38,10 @@ MazePlayer.prototype._defaults = {
     }
 };
 
-MazePlayer.prototype.findStartAndFinish  = function() {
+/**
+ * Figure out the start and finish points for the maze.
+ */
+Player.prototype.findStartAndFinish  = function() {
     for (let row = 0; row <= this._maze.width / this._maze.nodeSize; row++) {
         for (let column = 0; column <= this._maze.height / this._maze.nodeSize; column++) {
             let x = (row * this._maze.nodeSize) - this._maze.nodeSize / 2;
@@ -61,7 +64,7 @@ MazePlayer.prototype.findStartAndFinish  = function() {
  *
  * @param {string} key
  */
-MazePlayer.prototype.move = function(key) {
+Player.prototype.move = function(key) {
     if (!this._moving) {
         switch (key) {
             case this._keyBindings.UP:
@@ -86,26 +89,51 @@ MazePlayer.prototype.move = function(key) {
     }
 };
 
-MazePlayer.prototype.calculateScore = function() {
-    this._score = 0;
+/**
+ * Calculate how many extra moves the player has taken.
+ *
+ * @returns {number}
+ */
+Player.prototype.calculateExtraMoves = function() {
+    return this._history.length - this._maze.pathToFinish.length;
+};
 
-    for (let i = 0; i < this._history.length; i++) {
-        this._maze.pathToFinish.indexOf();
+/**
+ * Calculate the players score.
+ *
+ * @returns {*}
+ */
+Player.prototype.calculateScore = function() {
+    this._score = 100 - this._attempt;
+
+    let extraMoves = this.calculateExtraMoves() / 2;
+    if (extraMoves > 0) {
+        this._score -= (extraMoves / (this._maze.pathToFinish.length - 1) * 100).toFixed(1);
     }
 
     return this._score;
 };
 
-MazePlayer.prototype.respawn = function() {
+/**
+ * Re-spawn the player at the beginning of the maze and reset their stats.
+ */
+Player.prototype.respawn = function() {
     this._history = [this._start.copy()];
     this._target = this._start.copy();
     this._position = this._start.copy();
     this._moving = false;
-    this._finished = false;
     this._attempt++;
+
+    if (this._finished) {
+        this._finished = false;
+        this._attempt = 0;
+    }
 };
 
-MazePlayer.prototype.update = function() {
+/**
+ * Update the player's information.
+ */
+Player.prototype.update = function() {
     if (this.hasHitWall()) {
         this.respawn();
     }
@@ -119,7 +147,12 @@ MazePlayer.prototype.update = function() {
     }
 };
 
-MazePlayer.prototype.isMoving = function() {
+/**
+ * Check whether the player is currently moving.
+ *
+ * @returns {boolean}
+ */
+Player.prototype.isMoving = function() {
     return this._moving;
 };
 
@@ -128,7 +161,7 @@ MazePlayer.prototype.isMoving = function() {
  *
  * @returns {boolean}
  */
-MazePlayer.prototype.isAtTargetPosition = function() {
+Player.prototype.isAtTargetPosition = function() {
     if (this._position.dist(this._target) <= 0) {
         this._velocity.mult(0);
         this._moving = false;
@@ -142,7 +175,7 @@ MazePlayer.prototype.isAtTargetPosition = function() {
  *
  * @returns {boolean}
  */
-MazePlayer.prototype.hasHitWall = function() {
+Player.prototype.hasHitWall = function() {
     let color = this._maze.image.get(this._position.x, this._position.y);
     return color.toString() === this._maze.wallColor.levels.toString();
 };
@@ -152,7 +185,7 @@ MazePlayer.prototype.hasHitWall = function() {
  *
  * @returns {Query|Boolean|boolean|*}
  */
-MazePlayer.prototype.isFinished = function() {
+Player.prototype.isFinished = function() {
     this._finished = this._position.equals(this._finish);
     return this._finished;
 };
@@ -161,7 +194,7 @@ MazePlayer.prototype.isFinished = function() {
 /**
  * Render the little ball of joy!
  */
-MazePlayer.prototype.render = function() {
+Player.prototype.render = function() {
     fill(this._color);
     ellipse(this._position.x, this._position.y, this._size);
 };
