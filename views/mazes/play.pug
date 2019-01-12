@@ -1,0 +1,80 @@
+extends ../layout.pug
+
+block append scripts
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous")
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js" integrity="sha256-FA14tBI8v+/1BtcH9XtJpcNbComBEpdawUZA6BPXRVw=" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.14.2/tf.min.js" integrity="sha256-6E1cAFd6i2sREr5VE9NIrDfCodyUEC2gHfoDsW+sONA=" crossorigin="anonymous")
+    script(type="text/javascript" src='/web/p5/p5.min.js')
+    script(type="text/javascript" src="/web/scripts/pages/all.js")
+    script(type="text/javascript" src="/web/scripts/pages/play.js")
+
+block page-menu
+    ul(class="nav justify-content-end")
+        li(class="nav-item dropdown show")
+            a(class="nav-link dropdown-toggle open" href="#" id="page-settings" aria-haspopup="true" aria-expanded="false") Settings
+            div(class="dropdown-menu dropdown-menu-right page-settings-dropdown show" aria-labelledby="page-settings")
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Learning Rate
+                    input(type="number" id="learning-rate" name="learning-rate" class="form-control" step="0.01" max="1" min="0.01" placeholder="Learning Rate" value="0.05")
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Iterations
+                    input(type="number" id="iterations" name="iterations" class="form-control" step="10" max="1000000" min="10" placeholder="Iterations" value="500")
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Vehicles
+                    input(type="number" id="vehicles" name="vehicles" class="form-control" step="5" max="250" min="10" placeholder="Vehicles" value="20")
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Node Size
+                    input(type="number" id="node-_size" name="node-_size" class="form-control" step="1" max="9999" min="1" placeholder="Node Size" value= _maze.nodeSize)
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Start Color
+                    select(id="_start-_color" name="_start-_color" class="_color-select form-control")
+                        option(value= _maze.startColor data-_color= _maze.startColor selected) #{_maze.startColor}
+                        option(value= _maze.finishColor data-_color= _maze.finishColor)
+                        option(value= _maze.floorColor data-_color= _maze.floorColor)
+                        option(value= _maze.wallColor data-_color= _maze.wallColor)
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Finish Color
+                    select(id="_finish-_color" name="_finish-_color" class="_color-select form-control")
+                        option(value= _maze.startColor data-_color= _maze.startColor) #{_maze.startColor}
+                        option(value= _maze.finishColor data-_color= _maze.finishColor selected)
+                        option(value= _maze.floorColor data-_color= _maze.floorColor)
+                        option(value= _maze.wallColor data-_color= _maze.wallColor)
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Floor Color
+                    select(id="wall-_color" name="floor-_color" class="_color-select form-control")
+                        option(value= _maze.startColor data-_color= _maze.startColor) #{_maze.startColor}
+                        option(value= _maze.finishColor data-_color= _maze.finishColor)
+                        option(value= _maze.floorColor data-_color= _maze.floorColor selected)
+                        option(value= _maze.wallColor data-_color= _maze.wallColor)
+
+                div(class="form-row")
+                    div(class="form-group col-md-12")
+                        div(class="custom-control custom-checkbox")
+                            input(type="checkbox" class="custom-control-input" id="show-leader" name="show-leader")
+                            label(class="custom-control-label pt-1" for="show-leader" value="configuration.showLeader") Show the Leader
+
+                div(class="form-row")
+                    div(class="btn-group" role="group" aria-label="Basic example")
+                        button(type="submit" class="btn btn-primary") Start Training
+
+
+block content
+    div(class="container")
+        div(class="row mt-4")
+            div(class="col-lg-12")
+                section(id="_maze-container" class="_maze-container text-center" data-name= _maze.name)
