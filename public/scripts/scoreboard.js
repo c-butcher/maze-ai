@@ -10,12 +10,13 @@ function Scoreboard (player) {
 }
 
 Scoreboard.prototype.initialize = function(elements = {}) {
-    console.log(elements);
     if (elements.respawn) {
         this.inputs.respawn = elements.respawn;
-        this.inputs.respawn.click = () => {
-            this.player.respawn();
-            loop();
+        this.inputs.respawn.onclick = () => {
+            if (!this.player._position.equals(this.player._start)) {
+                this.player.respawn();
+                loop();
+            }
         }
     }
 
