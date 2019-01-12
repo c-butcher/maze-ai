@@ -2,12 +2,10 @@ function Player(options = {}) {
     options = Object.assign({}, this._defaults, options);
 
     this._maze = options.maze;
-    this._size = options.size || options.maze.nodeSize / 4;
+    this._size = options.size || options.maze.getNodeSize() / 4;
     this._position = options.position;
     this._velocity = options.velocity;
     this._target = options.target;
-    this._start = null;
-    this._finish = null;
     this._color = options.color;
     this._finished = false;
     this._moving = false;
@@ -15,10 +13,9 @@ function Player(options = {}) {
     this._attempt = options.attempt;
     this._keyBindings = options.keyBindings;
 
-    this.findStartAndFinish();
-    this._position = this._start.copy();
-    this._target   = this._start.copy();
-    this._history  = [this._start.copy()];
+    this._position = this._maze.getStart();
+    this._target   = this._maze.getStart();
+    this._history  = [this._maze.getStart()];
 }
 
 Player.prototype._defaults = {
@@ -41,31 +38,10 @@ Player.prototype._defaults = {
 /**
  * Returns an instance of the maze.
  *
- * @returns {Player._defaults.maze|{}|*|null}
+ * @returns {Maze}
  */
 Player.prototype.getMaze = function() {
     return this._maze;
-};
-
-/**
- * Figure out the start and finish points for the maze.
- */
-Player.prototype.findStartAndFinish  = function() {
-    for (let row = 0; row <= this._maze.width / this._maze.nodeSize; row++) {
-        for (let column = 0; column <= this._maze.height / this._maze.nodeSize; column++) {
-            let x = (row * this._maze.nodeSize) - this._maze.nodeSize / 2;
-            let y = (column * this._maze.nodeSize) - this._maze.nodeSize / 2;
-
-            let color = this._maze.image.get(x, y);
-
-            if (this._maze.startColor.matches(color)) {
-                this._start = new p5.Vector(x, y);
-
-            } else if (this._maze.finishColor.matches(color)) {
-                this._finish = new p5.Vector(x, y);
-            }
-        }
-    }
 };
 
 /**
@@ -92,8 +68,11 @@ Player.prototype.move = function(key) {
                 this._velocity.set(1, 0);
                 break;
         }
-        this._target = this._position.copy().add(this._velocity.copy().mult(this._maze.nodeSize));
-        this._history.push(this._target.copy().sub(this._maze.nodeSize / 2, this._maze.nodeSize / 2));
+
+        let nodeSize = this._maze.getNodeSize();
+
+        this._target = this._position.copy().add(this._velocity.copy().mult(nodeSize));
+        this._history.push(this._target.copy().sub(nodeSize / 2, nodeSize / 2));
         this._moving = true;
     }
 };
@@ -104,7 +83,7 @@ Player.prototype.move = function(key) {
  * @returns {number}
  */
 Player.prototype.calculateExtraMoves = function() {
-    return this._history.length - this._maze.pathToFinish.length;
+    return this._history.length - this._maze.getPath().length;
 };
 
 /**
@@ -118,7 +97,7 @@ Player.prototype.calculateScore = function() {
     this._score = 100 - this._attempt;
 
     if (this.calculateExtraMoves() > 0) {
-        this._score = ((this._maze.pathToFinish.length - 1) / (this._history.length - 1) * 100).toFixed(1);
+        this._score = ((this._maze.getPath().length - 1) / (this._history.length - 1) * 100).toFixed(1);
         this._score -= this._attempt;
     }
 
@@ -129,9 +108,9 @@ Player.prototype.calculateScore = function() {
  * Re-spawn the player at the beginning of the maze and reset their stats.
  */
 Player.prototype.respawn = function() {
-    this._history = [this._start.copy()];
-    this._target = this._start.copy();
-    this._position = this._start.copy();
+    this._history = [this._maze.getStart()];
+    this._target = this._maze.getStart();
+    this._position = this._maze.getStart();
     this._moving = false;
     this._attempt++;
 
@@ -187,12 +166,12 @@ Player.prototype.isAtTargetPosition = function() {
  * @returns {boolean}
  */
 Player.prototype.hasHitWall = function() {
-    let color = this._maze.image.get(this._position.x, this._position.y);
-    return color.toString() === this._maze.wallColor.levels.toString();
+    let color = this._maze.getPixelColor(this._position);
+    return this._maze.getWallColor().matches(color);
 };
 
 /**
- * Check whether the player has finished the _maze.
+ * Check whether the player has finished the maze.
  *
  * @returns {Query|Boolean|boolean|*}
  */

@@ -1,5 +1,5 @@
-let player = null;
 let maze = null;
+let player = null;
 let isReady = false;
 let scoreboard = null;
 
@@ -24,21 +24,12 @@ function setup() {
     $.ajax({
         url: "/fetch/" + name,
         success: function(response) {
-            maze = response.maze;
-            maze.startColor = hexToColor(maze.startColor);
-            maze.finishColor = hexToColor(maze.finishColor);
-            maze.floorColor = hexToColor(maze.floorColor);
-            maze.wallColor = hexToColor(maze.wallColor);
+            loadImage("/web/images/" + response.maze.image, (img) => {
+                response.maze.image = img;
 
-            loadImage("/web/images/" + maze.image, (img) => {
-                maze.image = img;
-                canvas = createCanvas(maze.width, maze.height);
-                canvas.parent('#maze-container');
+                maze = new Maze(response.maze);
 
-                player = new Player({
-                    maze: maze,
-                });
-
+                player = new Player({ maze });
                 scoreboard = new Scoreboard(player);
                 scoreboard.initialize({
                     respawn: document.getElementById('scoreboard-respawn'),
@@ -46,6 +37,9 @@ function setup() {
                     moves: document.getElementById('scoreboard-moves'),
                     score: document.getElementById('scoreboard-score'),
                 });
+
+                canvas = createCanvas(maze.getWidth(), maze.getHeight());
+                canvas.parent('#maze-container');
 
                 isReady = true;
             });
@@ -57,7 +51,7 @@ function draw() {
     background(0);
 
     if (isReady) {
-        image(maze.image, 0, 0);
+        image(maze.getImage(), 0, 0);
 
         player.update();
         player.render();

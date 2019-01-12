@@ -13,7 +13,7 @@ Scoreboard.prototype.initialize = function(elements = {}) {
     if (elements.respawn) {
         this.inputs.respawn = elements.respawn;
         this.inputs.respawn.onclick = () => {
-            if (!this.player._position.equals(this.player._start)) {
+            if (this.player._history.length > 1) {
                 this.player.respawn();
                 loop();
             }
@@ -37,6 +37,6 @@ Scoreboard.prototype.render = function() {
     let score = this.player.calculateScore();
 
     this.inputs.attempts.value = this.player._attempt;
-    this.inputs.moves.value    = (this.player._history.length - 1) + " / " + (this.maze.pathToFinish.length - 1);
+    this.inputs.moves.value    = (this.player._history.length - 1) + " / " + (this.maze.getPath().length - 1);
     this.inputs.score.value    = score;
 };
