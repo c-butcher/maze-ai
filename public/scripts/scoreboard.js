@@ -1,4 +1,4 @@
-function Scoreboard (player) {
+function Scoreboard (player, elements = {}) {
     this.player = player;
     this.maze   = player.getMaze();
     this.inputs = {
@@ -7,10 +7,20 @@ function Scoreboard (player) {
         moves: null,
         score: null
     };
+
+    this.initialize(elements);
 }
 
+/**
+ *
+ * @param elements
+ */
 Scoreboard.prototype.initialize = function(elements = {}) {
     if (elements.respawn) {
+        if (this.inputs.respawn) {
+            this.inputs.respawn.onclick = null;
+        }
+
         this.inputs.respawn = elements.respawn;
         this.inputs.respawn.onclick = () => {
             if (this.player._history.length > 1) {
@@ -33,6 +43,9 @@ Scoreboard.prototype.initialize = function(elements = {}) {
     }
 };
 
+/**
+ * Renders the values to our scoreboard.
+ */
 Scoreboard.prototype.render = function() {
     let score = this.player.calculateScore();
 

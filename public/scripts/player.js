@@ -18,6 +18,12 @@ function Player(options = {}) {
     this._history  = [this._maze.getStart()];
 }
 
+/**
+ * Default options for the player.
+ *
+ * @type {{score: number, keyBindings: {DOWN: string, LEFT: string, RIGHT: string, UP: string}, size: null, color: number, position: p5.Vector, velocity: p5.Vector, maze: {}, attempt: number, target: p5.Vector}}
+ * @private
+ */
 Player.prototype._defaults = {
     maze: {},
     size: null,
