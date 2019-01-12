@@ -33,8 +33,13 @@ function draw() {
 
     if (isReady) {
         image(maze.image, 0, 0);
+
         player.update();
         player.render();
+
+        if (player.isFinished()) {
+            scoreboard.render();
+        }
     }
 }
 

@@ -2,7 +2,7 @@ function MazePlayer(options = {}) {
     options = Object.assign({}, this._defaults, options);
 
     this._maze = options.maze;
-    this._size = options.size;
+    this._size = options.size || options.maze.nodeSize / 4;
     this._position = options.position;
     this._velocity = options.velocity;
     this._target = options.target;
@@ -11,6 +11,7 @@ function MazePlayer(options = {}) {
     this._color = options.color;
     this._finished = false;
     this._moving = false;
+    this._score = options.score;
     this._attempt = options.attempt;
     this._keyBindings = options.keyBindings;
 
@@ -22,7 +23,8 @@ function MazePlayer(options = {}) {
 
 MazePlayer.prototype._defaults = {
     maze: {},
-    size: 5,
+    size: null,
+    score: 0,
     position: new p5.Vector(),
     velocity: new p5.Vector(),
     target: new p5.Vector(),
@@ -84,13 +86,22 @@ MazePlayer.prototype.move = function(key) {
     }
 };
 
-MazePlayer.prototype.respawn = function() {
-    console.log(this._history);
-    console.log(this._maze.pathToFinish);
+MazePlayer.prototype.calculateScore = function() {
+    this._score = 0;
 
+    for (let i = 0; i < this._history.length; i++) {
+        this._maze.pathToFinish.indexOf();
+    }
+
+    return this._score;
+};
+
+MazePlayer.prototype.respawn = function() {
     this._history = [this._start.copy()];
     this._target = this._start.copy();
     this._position = this._start.copy();
+    this._moving = false;
+    this._finished = false;
     this._attempt++;
 };
 
@@ -101,10 +112,6 @@ MazePlayer.prototype.update = function() {
 
     if (this.isAtTargetPosition()) {
         this._moving = false;
-    }
-
-    if (this.isFinished()) {
-
     }
 
     if (this._moving) {
@@ -146,7 +153,8 @@ MazePlayer.prototype.hasHitWall = function() {
  * @returns {Query|Boolean|boolean|*}
  */
 MazePlayer.prototype.isFinished = function() {
-    return this._finished = this._position.equals(this._finish);
+    this._finished = this._position.equals(this._finish);
+    return this._finished;
 };
 
 
