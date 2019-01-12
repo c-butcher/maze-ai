@@ -40,7 +40,12 @@ function setup() {
                 });
 
                 scoreboard = new Scoreboard(player);
-                scoreboard.initialize();
+                scoreboard.initialize({
+                    respawn: document.getElementById('scoreboard-respawn'),
+                    attempts: document.getElementById('scoreboard-attempts'),
+                    moves: document.getElementById('scoreboard-moves'),
+                    score: document.getElementById('scoreboard-score'),
+                });
 
                 isReady = true;
             });
