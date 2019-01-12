@@ -7,9 +7,44 @@ block append scripts
     script(src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js" integrity="sha256-FA14tBI8v+/1BtcH9XtJpcNbComBEpdawUZA6BPXRVw=" crossorigin="anonymous")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/0.14.2/tf.min.js" integrity="sha256-6E1cAFd6i2sREr5VE9NIrDfCodyUEC2gHfoDsW+sONA=" crossorigin="anonymous")
     script(type="text/javascript" src='/web/p5/p5.min.js')
-    script(type="text/javascript" src="/web/scripts/maze-player.js")
+    script(type="text/javascript" src="/web/scripts/maze.js")
+    script(type="text/javascript" src="/web/scripts/player.js")
+    script(type="text/javascript" src="/web/scripts/scoreboard.js")
     script(type="text/javascript" src="/web/scripts/pages/all.js")
     script(type="text/javascript" src="/web/scripts/pages/play.js")
+
+
+block page-menu
+    ul(class="nav justify-content-end")
+        li(class="nav-item dropdown show")
+            a(class="nav-link dropdown-toggle open" href="#" id="page-settings" aria-haspopup="true" aria-expanded="false") Scoreboard
+            div(class="dropdown-menu dropdown-menu-right page-settings-dropdown show" aria-labelledby="page-settings")
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Attempt
+                    input(type="number" class="form-control text-right" id="scoreboard-attempts" name="scoreboard-attempts" disabled)
+                    div(class="input-group-append")
+                        div(class="input-group-text")
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Moves
+                    input(type="text" class="form-control text-right" id="scoreboard-moves" name="scoreboard-moves" disabled)
+                    div(class="input-group-append")
+                        div(class="input-group-text")
+
+                div(class="input-group mb-2 mr-sm-2")
+                    div(class="input-group-prepend")
+                        div(class="input-group-text") Final Score
+                    input(type="number" class="form-control text-right" id="scoreboard-score" name="scoreboard-score" disabled)
+                    div(class="input-group-append")
+                        div(class="input-group-text") %
+
+                div(class="btn-group w-100")
+                    a(class="btn btn-success" href="/web/images/" + maze.image download) Download
+                    a(id="scoreboard-train" class="btn btn-secondary col-lg-4 text-white" href="/learn/solve/" + maze.name) Train
+                    a(id="scoreboard-respawn" class="btn btn-primary col-lg-4 text-white") Respawn
+
 
 block content
     div(class="container")
