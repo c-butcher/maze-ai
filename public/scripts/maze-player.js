@@ -11,20 +11,23 @@ function MazePlayer(options = {}) {
     this._color = options.color;
     this._finished = false;
     this._moving = false;
+    this._attempt = options.attempt;
     this._keyBindings = options.keyBindings;
 
     this.findStartAndFinish();
     this._position = this._start.copy();
-    this._target = this._start.copy();
+    this._target   = this._start.copy();
+    this._history  = [this._start.copy()];
 }
 
 MazePlayer.prototype._defaults = {
-    maze: null,
+    maze: {},
     size: 5,
-    position: null,
-    velocity: null,
-    target: null,
+    position: new p5.Vector(),
+    velocity: new p5.Vector(),
+    target: new p5.Vector(),
     color: 0,
+    attempt: 0,
     keyBindings: {
         UP: 'ArrowUp',
         DOWN: 'ArrowDown',
@@ -34,18 +37,18 @@ MazePlayer.prototype._defaults = {
 };
 
 MazePlayer.prototype.findStartAndFinish  = function() {
-    for (let row = 0; row <= this.maze.width / this.maze.nodeSize; row++) {
-        for (let column = 0; column <= this.maze.height / this.maze.nodeSize; column++) {
-            let x = (row * this.maze.nodeSize) - this.maze.nodeSize / 2;
-            let y = (column * this.maze.nodeSize) - this.maze.nodeSize / 2;
+    for (let row = 0; row <= this._maze.width / this._maze.nodeSize; row++) {
+        for (let column = 0; column <= this._maze.height / this._maze.nodeSize; column++) {
+            let x = (row * this._maze.nodeSize) - this._maze.nodeSize / 2;
+            let y = (column * this._maze.nodeSize) - this._maze.nodeSize / 2;
 
-            let color = this.maze.image.get(x, y);
+            let color = this._maze.image.get(x, y);
 
-            if (this.maze.startColor.matches(color)) {
-                this.start = createVector(x, y);
+            if (this._maze.startColor.matches(color)) {
+                this._start = new p5.Vector(x, y);
 
-            } else if (this.maze.finishColor.matches(color)) {
-                this.finish = createVector(x, y);
+            } else if (this._maze.finishColor.matches(color)) {
+                this._finish = new p5.Vector(x, y);
             }
         }
     }
@@ -75,11 +78,36 @@ MazePlayer.prototype.move = function(key) {
                 this._velocity.set(1, 0);
                 break;
         }
-
-        this._target = this._position.copy().add(this._velocity.mult(this._maze.nodeSize));
+        this._target = this._position.copy().add(this._velocity.copy().mult(this._maze.nodeSize));
+        this._history.push(this._target.copy().sub(this._maze.nodeSize / 2, this._maze.nodeSize / 2));
         this._moving = true;
+    }
+};
 
-    } else {
+MazePlayer.prototype.respawn = function() {
+    console.log(this._history);
+    console.log(this._maze.pathToFinish);
+
+    this._history = [this._start.copy()];
+    this._target = this._start.copy();
+    this._position = this._start.copy();
+    this._attempt++;
+};
+
+MazePlayer.prototype.update = function() {
+    if (this.hasHitWall()) {
+        this.respawn();
+    }
+
+    if (this.isAtTargetPosition()) {
+        this._moving = false;
+    }
+
+    if (this.isFinished()) {
+
+    }
+
+    if (this._moving) {
         this._position.add(this._velocity);
     }
 };
@@ -94,12 +122,22 @@ MazePlayer.prototype.isMoving = function() {
  * @returns {boolean}
  */
 MazePlayer.prototype.isAtTargetPosition = function() {
-    if (this._position.dist(this._target) < 2) {
+    if (this._position.dist(this._target) <= 0) {
         this._velocity.mult(0);
-        this.isMoving = false;
+        this._moving = false;
     }
 
-    return !this.isMoving;
+    return !this._moving;
+};
+
+/**
+ * Check to see if the player has hit a wall.
+ *
+ * @returns {boolean}
+ */
+MazePlayer.prototype.hasHitWall = function() {
+    let color = this._maze.image.get(this._position.x, this._position.y);
+    return color.toString() === this._maze.wallColor.levels.toString();
 };
 
 /**
