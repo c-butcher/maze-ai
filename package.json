@@ -9,9 +9,9 @@
   "author": "Chris Butcher",
   "license": "MIT",
   "dependencies": {
+    "@tensorflow/tfjs": "^0.14.2",
     "express": "^4.16.4",
     "helmet": "^3.15.0",
-    "image-size": "^0.6.3",
     "mongodb": "^3.1.10",
     "mongoose": "^5.4.2",
     "p5": "^0.7.2",

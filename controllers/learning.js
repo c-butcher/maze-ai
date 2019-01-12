@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const imageSize = require('image-size');
 const fs = require('fs');
 const Maze = require('../models/maze');
 
