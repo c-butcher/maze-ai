@@ -53,3 +53,18 @@ $(() => {
         });
     }
 });
+
+
+/**
+ * Converts a hexadecimal color value to a p5.Color object.
+ *
+ * @param {string} value
+ *
+ * @returns {p5.Color}
+ */
+function hexToColor(value) {
+    let hexes = value.replace('#', '').match(/.{1,2}/g);
+    let digits = unhex(hexes);
+
+    return color(...digits);
+}

@@ -8,13 +8,6 @@ let society = null;
 
 let maze = null;
 
-function hexToColor(value) {
-    let hexes = value.replace('#', '').match(/.{1,2}/g);
-    let digits = unhex(hexes);
-
-    return color(...digits);
-}
-
 function setup() {
     let name = $('#maze-container').data('name');
     $.ajax({
