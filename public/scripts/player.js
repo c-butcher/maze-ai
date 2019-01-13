@@ -82,15 +82,6 @@ Player.prototype.move = function(key) {
     }
 };
 
-/**
- * Calculate how many extra moves the player has taken.
- *
- * @returns {number}
- */
-Player.prototype.calculateExtraMoves = function() {
-    return this._history.length - this._maze.getPath().length;
-};
-
 Player.prototype.getAttempts = function() {
     return this._attempt;
 };
