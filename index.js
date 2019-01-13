@@ -14,7 +14,7 @@ global.imgURL = '/web/images/';
 
 app.use(helmet());
 app.use(database({name: 'mazes'}));
-app.use(express.urlencoded({extended: true, limit: '5mb'}));
+app.use(express.urlencoded({extended: true, limit: '5mb', parameterLimit: 999999}));
 app.use(express.json());
 
 app.set('views', './views');
