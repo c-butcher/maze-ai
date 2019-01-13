@@ -122,6 +122,10 @@ Maze.prototype.getFinish = function() {
     return this._finish.copy();
 };
 
+Maze.prototype.isAtFinish = function(position) {
+
+};
+
 /**
  * Find the start and finish points for the maze.
  *

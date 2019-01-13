@@ -9,7 +9,6 @@ function Player(options = {}) {
     this._color = options.color;
     this._finished = false;
     this._moving = false;
-    this._score = options.score;
     this._attempt = options.attempt;
     this._keyBindings = options.keyBindings;
 
@@ -92,22 +91,17 @@ Player.prototype.calculateExtraMoves = function() {
     return this._history.length - this._maze.getPath().length;
 };
 
+Player.prototype.getAttempts = function() {
+    return this._attempt;
+};
+
 /**
- * Calculate the players score.
+ * Returns the history of the players moves.
  *
- * Score = 100 Percent - Attempts - Percent of Extra Moves
- *
- * @returns {*}
+ * @returns {Array<Number[]>}
  */
-Player.prototype.calculateScore = function() {
-    this._score = 100 - this._attempt;
-
-    if (this.calculateExtraMoves() > 0) {
-        this._score = ((this._maze.getPath().length - 1) / (this._history.length - 1) * 100).toFixed(1);
-        this._score -= this._attempt;
-    }
-
-    return this._score;
+Player.prototype.getHistory = function() {
+    return this._history;
 };
 
 /**
