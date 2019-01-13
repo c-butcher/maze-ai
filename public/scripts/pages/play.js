@@ -32,8 +32,12 @@ function setup() {
                 response.maze.image = img;
 
                 maze = new Maze(response.maze);
-                player = new Player({ maze });
-                scoreboard = new Scoreboard(player, {
+                player = new Player({
+                    distance: maze.getNodeSize(),
+                    position: maze.getStart(),
+                });
+
+                scoreboard = new Scoreboard(maze, player, {
                     respawn: document.getElementById('scoreboard-respawn'),
                     attempts: document.getElementById('scoreboard-attempts'),
                     moves: document.getElementById('scoreboard-moves'),
@@ -50,17 +54,31 @@ function setup() {
 function draw() {
     background(0);
 
-    if (player) {
-        image(maze.getImage(), 0, 0);
+    if (maze) {
+        maze.render();
+
+        if (player.isMoving()) {
+            let finish = maze.getFinish();
+            let position = player.getPosition();
+
+            // When the player hits a wall, we want them to re-spawn
+            // at the beginning of the maze.
+            if (maze.isWall(position)) {
+                player.respawn( maze.getStart() );
+                scoreboard.increaseAttempts();
+            }
+
+            // When the player reaches the finish line, then we want
+            // to stop them from moving until they reset the game.
+            if (player.isAtPosition(finish)) {
+                noLoop();
+            }
+
+            scoreboard.render();
+        }
 
         player.update();
         player.render();
-
-        scoreboard.render();
-
-        if (player.isFinished()) {
-            noLoop();
-        }
     }
 }
 

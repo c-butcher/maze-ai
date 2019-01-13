@@ -1,36 +1,31 @@
 function Player(options = {}) {
     options = Object.assign({}, this._defaults, options);
 
-    this._maze = options.maze;
-    this._size = options.size || options.maze.getNodeSize() / 4;
+    this._size = options.size || options.distance / 4;
     this._position = options.position;
     this._velocity = options.velocity;
+    this._distance = options.distance;
     this._target = options.target;
     this._color = options.color;
     this._finished = false;
     this._moving = false;
-    this._attempt = options.attempt;
+    this._history = [this._position];
     this._keyBindings = options.keyBindings;
-
-    this._position = this._maze.getStart();
-    this._target   = this._maze.getStart();
-    this._history  = [this._maze.getStart()];
 }
 
 /**
  * Default options for the player.
  *
- * @type {{score: number, keyBindings: {DOWN: string, LEFT: string, RIGHT: string, UP: string}, size: null, color: number, position: p5.Vector, velocity: p5.Vector, maze: {}, attempt: number, target: p5.Vector}}
+ * @type {{keyBindings: {DOWN: string, LEFT: string, RIGHT: string, UP: string}, size: null, color: number, position: p5.Vector, velocity: p5.Vector, target: p5.Vector}}
  * @private
  */
 Player.prototype._defaults = {
-    maze: {},
     size: null,
     position: new p5.Vector(),
     velocity: new p5.Vector(),
     target: new p5.Vector(),
+    distance: 40,
     color: 0,
-    attempt: 0,
     keyBindings: {
         UP: 'ArrowUp',
         DOWN: 'ArrowDown',
@@ -40,18 +35,81 @@ Player.prototype._defaults = {
 };
 
 /**
- * Returns an instance of the maze.
+ * Returns the history of the players moves.
  *
- * @returns {Maze}
+ * @returns {Array<Number[]>}
  */
-Player.prototype.getMaze = function() {
-    return this._maze;
+Player.prototype.getHistory = function() {
+    return this._history;
+};
+
+/**
+ * Returns a copy of the players position.
+ *
+ * @returns {p5.Vector}
+ */
+Player.prototype.getPosition = function() {
+    return this._position.copy();
+};
+
+/**
+ * Sets the position of the player.
+ *
+ * @params {p5.Vector} position
+ */
+Player.prototype.setPosition = function(position) {
+    this._position = position;
+};
+
+/**
+ * Returns a copy of the players position.
+ *
+ * @returns {p5.Vector}
+ */
+Player.prototype.getTarget = function() {
+    return this._target.copy();
+};
+
+/**
+ * Returns a copy of the players current velocity.
+ *
+ * @returns {p5.Vector}
+ */
+Player.prototype.getVelocity = function() {
+    return this._velocity.copy();
+};
+
+/**
+ * Sets the velocity of the player.
+ *
+ * @params {p5.Vector} velocity
+ */
+Player.prototype.setVelocity = function(velocity) {
+    this._velocity = velocity;
+};
+
+/**
+ * Check whether the player is currently moving.
+ *
+ * @returns {boolean}
+ */
+Player.prototype.isMoving = function() {
+    return this._moving;
+};
+
+/**
+ * Check to see if the player is at a specific position.
+ *
+ * @returns {boolean}
+ */
+Player.prototype.isAtPosition = function(position) {
+    return this._position.equals(position);
 };
 
 /**
  * Move the player to its new _position.
  *
- * @param {string} key
+ * @params {string} key
  */
 Player.prototype.move = function(key) {
     if (!this._moving) {
@@ -73,40 +131,25 @@ Player.prototype.move = function(key) {
                 break;
         }
 
-        let nodeSize = this._maze.getNodeSize();
-
-        this._target = this._position.copy().add(this._velocity.copy().mult(nodeSize));
-        this._history.push(this._target.copy().sub(nodeSize / 2, nodeSize / 2));
+        this._target = this._position.copy().add(this._velocity.copy().mult(this._distance));
+        this._history.push(this._target.copy().sub(this._distance / 2, this._distance / 2));
         this._moving = true;
     }
 };
 
-Player.prototype.getAttempts = function() {
-    return this._attempt;
-};
-
 /**
- * Returns the history of the players moves.
+ * Re-spawn the player at the specific location.
  *
- * @returns {Array<Number[]>}
+ * @params {p5.Vector} position
  */
-Player.prototype.getHistory = function() {
-    return this._history;
-};
-
-/**
- * Re-spawn the player at the beginning of the maze and reset their stats.
- */
-Player.prototype.respawn = function() {
-    this._history = [this._maze.getStart()];
-    this._target = this._maze.getStart();
-    this._position = this._maze.getStart();
+Player.prototype.respawn = function(position) {
+    this._history = [position.copy()];
+    this._target = position.copy();
+    this._position = position.copy();
     this._moving = false;
-    this._attempt++;
 
     if (this._finished) {
         this._finished = false;
-        this._attempt = 0;
     }
 };
 
@@ -114,11 +157,7 @@ Player.prototype.respawn = function() {
  * Update the player's information.
  */
 Player.prototype.update = function() {
-    if (this.hasHitWall()) {
-        this.respawn();
-    }
-
-    if (this.isAtTargetPosition()) {
+    if (this.isAtPosition(this._target)) {
         this._moving = false;
     }
 
@@ -126,50 +165,6 @@ Player.prototype.update = function() {
         this._position.add(this._velocity);
     }
 };
-
-/**
- * Check whether the player is currently moving.
- *
- * @returns {boolean}
- */
-Player.prototype.isMoving = function() {
-    return this._moving;
-};
-
-/**
- * Check to see if the player has reached their _target _position.
- *
- * @returns {boolean}
- */
-Player.prototype.isAtTargetPosition = function() {
-    if (this._position.dist(this._target) <= 0) {
-        this._velocity.mult(0);
-        this._moving = false;
-    }
-
-    return !this._moving;
-};
-
-/**
- * Check to see if the player has hit a wall.
- *
- * @returns {boolean}
- */
-Player.prototype.hasHitWall = function() {
-    let color = this._maze.getPixelColor(this._position);
-    return this._maze.getWallColor().matches(color);
-};
-
-/**
- * Check whether the player has finished the maze.
- *
- * @returns {Query|Boolean|boolean|*}
- */
-Player.prototype.isFinished = function() {
-    this._finished = this._position.equals(this._finish);
-    return this._finished;
-};
-
 
 /**
  * Render the little ball of joy!

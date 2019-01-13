@@ -1,7 +1,8 @@
-function Scoreboard (player, elements = {}) {
+function Scoreboard (maze, player, elements = {}) {
+    this.maze   = maze;
     this.player = player;
-    this.maze   = player.getMaze();
     this.score  = 100;
+    this.attempts = 0;
     this.inputs = {
         respawn: null,
         attempts: null,
@@ -15,7 +16,7 @@ function Scoreboard (player, elements = {}) {
 /**
  * Initialize the scoreboard with the required DOM elements.
  *
- * @param {*} elements
+ * @params {*} elements
  */
 Scoreboard.prototype.initialize = function(elements = {}) {
     if (elements.respawn) {
@@ -25,8 +26,14 @@ Scoreboard.prototype.initialize = function(elements = {}) {
 
         this.inputs.respawn = elements.respawn;
         this.inputs.respawn.onclick = () => {
-            if (this.player._history.length > 1) {
-                this.player.respawn();
+            if (this.player.getHistory().length > 1) {
+                let start = this.maze.getStart();
+
+                this.player.respawn(start);
+                this.attempts++;
+
+                this.render();
+
                 loop();
             }
         }
@@ -51,25 +58,32 @@ Scoreboard.prototype.initialize = function(elements = {}) {
 Scoreboard.prototype.render = function() {
     this.calculateScore(this.player);
 
-    this.inputs.attempts.value = this.player.getAttempts();
+    this.inputs.attempts.value = this.attempts;
     this.inputs.moves.value    = (this.player.getHistory().length - 1) + " / " + (this.maze.getPath().length - 1);
     this.inputs.score.value    = this.score;
 };
 
 /**
+ * Increase the number of attempts made.
+ */
+Scoreboard.prototype.increaseAttempts = function() {
+    this.attempts++;
+};
+
+/**
  * Calculates a players score.
  *
- * @param player
+ * @params {Player} player
+ *
  * @returns {*}
  */
 Scoreboard.prototype.calculateScore = function(player) {
-    let attempts = player.getAttempts();
     let history = player.getHistory();
     let path = this.maze.getPath();
     let extraMoves = history.length - path.length;
 
     // We subtract one percent for every failed attempt.
-    this.score = 100 - attempts;
+    this.score = 100 - this.attempts;
 
     // When a player has started to go over the optimal amount of moves
     // We calculate the percentage that a single tile is worth,
@@ -78,6 +92,11 @@ Scoreboard.prototype.calculateScore = function(player) {
         let percentOverOptimalPath = (extraMoves / (path.length - 1) * 100).toFixed(1);
 
         this.score -= percentOverOptimalPath;
+    }
+
+    // Just making sure we don't go below zero.
+    if (this.score < 0) {
+        this.score = 0;
     }
 
     return this.score;

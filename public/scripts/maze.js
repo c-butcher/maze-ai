@@ -1,3 +1,10 @@
+/**
+ * Create a new playable maze.
+ *
+ * @param {*} maze
+ *
+ * @constructor
+ */
 function Maze(maze) {
     this._image    = maze.image;
     this._width    = maze.width;
@@ -149,3 +156,24 @@ Maze.prototype.findStartAndFinish = function() {
         }
     }
 };
+
+/**
+ * Tells whether the position is a wall.
+ *
+ * @param {p5.Vector} position
+ *
+ * @returns {boolean}
+ */
+Maze.prototype.isWall = function(position) {
+    let color = this.getPixelColor(position);
+    return this._wallColor.matches(color);
+};
+
+/**
+ * Render the maze.
+ */
+Maze.prototype.render = function() {
+    image(this._image, 0, 0);
+};
+
+
