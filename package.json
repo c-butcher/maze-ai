@@ -1,7 +1,7 @@
 {
-  "name": "maze-generator",
+  "name": "amaze-ai",
   "version": "0.1.0",
-  "description": "Generates a maze using a back-tracing algorithm.",
+  "description": "Generates mazes for download, play or to train the built-in convolutional neural network.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
