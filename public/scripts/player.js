@@ -26,7 +26,6 @@ function Player(options = {}) {
 Player.prototype._defaults = {
     maze: {},
     size: null,
-    score: 0,
     position: new p5.Vector(),
     velocity: new p5.Vector(),
     target: new p5.Vector(),
