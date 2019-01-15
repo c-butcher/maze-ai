@@ -1,18 +1,19 @@
 function Controller(width, height, cellSize) {
-    this.width       = width;
-    this.height      = height;
-    this.cellSize    = cellSize;
-    this.startColor  = '#00AA00';
-    this.finishColor = '#AA0000';
-    this.finishColor = '#AA0000';
-    this.floorColor  = '#FFFFFF';
-    this.wallColor   = '#000000';
-    this.container   = null;
-    this.frameRate   = 10;
-    this.breadcrumbs = false;
-    this.canvas      = null;
-    this.isSaving    = false;
-    this.maze        = new MazeGenerator(width, height, cellSize);
+    this.width          = width;
+    this.height         = height;
+    this.cellSize       = cellSize;
+    this.startColor     = '#00AA00';
+    this.finishColor    = '#AA0000';
+    this.finishColor    = '#AA0000';
+    this.floorColor     = '#FFFFFF';
+    this.wallColor      = '#000000';
+    this.container      = null;
+    this.frameRate      = 10;
+    this.breadcrumbs    = false;
+    this.canvas         = null;
+    this.isSaving       = false;
+    this.renderAtFinish = false;
+    this.maze           = new MazeGenerator(width, height, cellSize);
 
     this.inputs = {
         width: null,
@@ -64,6 +65,17 @@ function Controller(width, height, cellSize) {
             this.inputs.breadcrumbs.onchange = () => {
                 this.breadcrumbs = this.inputs.breadcrumbs.checked;
                 this.maze.showBreadcrumbs(this.breadcrumbs);
+            }
+        }
+
+        if (inputs.renderAtFinish) {
+            this.inputs.renderAtFinish = inputs.renderAtFinish;
+            this.inputs.renderAtFinish.value = this.renderAtFinish;
+            this.inputs.renderAtFinish.checked = this.renderAtFinish;
+
+            this.inputs.renderAtFinish.onchange = () => {
+                this.renderAtFinish = this.inputs.renderAtFinish.checked;
+                this.maze.showOnFinished(this.renderAtFinish);
             }
         }
 

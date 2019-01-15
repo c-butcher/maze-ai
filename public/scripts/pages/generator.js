@@ -9,6 +9,7 @@ function setup() {
         frameRate: document.getElementById('maze-frame-rate'),
         continuous: document.getElementById('maze-continuous'),
         breadcrumbs: document.getElementById('maze-breadcrumbs'),
+        renderAtFinish: document.getElementById('maze-render-at-finish'),
         download: document.getElementById('maze-download'),
         train: document.getElementById('maze-train'),
         restart: document.getElementById('maze-restart'),

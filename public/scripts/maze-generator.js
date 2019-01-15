@@ -67,6 +67,23 @@ function MazeGenerator(width, height, cellSize) {
     this.numRows = Math.floor(this.height / this.cellSize);
 
     /**
+     * Only render when the maze has finished.
+     * This increases performance for larger mazes.
+     *
+     * @type {boolean}
+     */
+    this.renderAtFinish = false;
+
+    /**
+     * Number of dots to render when rendering in background
+     *
+     * @type {number}
+     *
+     * @private
+     */
+    this._dotCount = 0;
+
+    /**
      * Tells whether to render the history as breadcrumbs.
      *
      * @type {boolean}
@@ -270,26 +287,53 @@ function MazeGenerator(width, height, cellSize) {
     };
 
     /**
+     * Sets whether to render to maze during generation, or wait
+     * until the maze has finished.
+     *
+     * @param {boolean} isVisible
+     * @returns {MazeGenerator}
+     */
+    this.showOnFinished = function(isVisible) {
+        this.renderAtFinish = isVisible;
+        return this;
+    };
+
+    /**
      * Render the tiles for the maze.
      *
      * @return {MazeGenerator}
      */
     this.render = function() {
-        for (let tile of this.grid) {
-            tile.render(this.numColumns);
-        }
 
-        if (this.breadcrumbs && this.history.length > 0) {
-            let count = 0;
-            for (let tile of this.history) {
-                tile.breadcrumb(0, 0, 0, count / this.history.length * 255);
-                count++;
+        if (!this.renderAtFinish || this.history.length < 1) {
+            for (let tile of this.grid) {
+                tile.render(this.numColumns);
             }
+
+            if (this.breadcrumbs && this.history.length > 0) {
+                let count = 0;
+                for (let tile of this.history) {
+                    tile.breadcrumb(0, 0, 0, count / this.history.length * 255);
+                    count++;
+                }
+            }
+
+            this.start.highlight('#00AA00');
+            this.finish.highlight('#AA0000');
+
+            return this;
+        } else {
+            if (Math.ceil(this._dotCount / 5) === 3) {
+                this._dotCount = 0;
+            } else {
+                this._dotCount++;
+            }
+
+            let dots = '.'.repeat(Math.ceil(this._dotCount / 5));
+
+            fill(0);
+            textSize(18);
+            text("Rendering " + dots, width / 2, height / 2);
         }
-
-        this.start.highlight('#00AA00');
-        this.finish.highlight('#AA0000');
-
-        return this;
     }
 }
