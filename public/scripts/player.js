@@ -35,9 +35,17 @@ Player.prototype._defaults = {
     attempt: 0,
     keyBindings: {
         UP: 'ArrowUp',
-        DOWN: 'ArrowDown',
         RIGHT: 'ArrowRight',
+        DOWN: 'ArrowDown',
         LEFT: 'ArrowLeft',
+        all: function() {
+            return [
+                this.UP,
+                this.RIGHT,
+                this.DOWN,
+                this.LEFT,
+            ];
+        }
     }
 };
 
@@ -56,7 +64,7 @@ Player.prototype.getMaze = function() {
  * @param {string} key
  */
 Player.prototype.move = function(key) {
-    if (!this._moving) {
+    if (!this._moving && this._keyBindings.all().includes(key)) {
         switch (key) {
             case this._keyBindings.UP:
                 this._velocity.set(0, -1);
