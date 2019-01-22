@@ -58,7 +58,7 @@ function draw() {
 
         scoreboard.render();
 
-        if (player.isFinished()) {
+        if (player.isFinished(maze.getFinish())) {
             noLoop();
         }
     }

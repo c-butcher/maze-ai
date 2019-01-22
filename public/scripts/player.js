@@ -187,10 +187,12 @@ Player.prototype.hasHitWall = function() {
 /**
  * Check whether the player has finished the maze.
  *
+ * @param {p5.Vector} finish
+ *
  * @returns {Query|Boolean|boolean|*}
  */
-Player.prototype.isFinished = function() {
-    this._finished = this._position.equals(this._finish);
+Player.prototype.isFinished = function(finish) {
+    this._finished = this._position.equals(finish);
     return this._finished;
 };
 

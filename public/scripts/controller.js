@@ -156,7 +156,7 @@ function Controller(width, height, cellSize) {
         this.maze.initialize();
         this.maze.showBreadcrumbs(this.breadcrumbs);
 
-        this.canvas = createCanvas(this.maze.width, this.maze.height, 'WEBGL');
+        this.canvas = createCanvas(this.maze.width, this.maze.height);
         this.canvas.parent(this.container);
         this.canvas.resize(this.maze.width, this.maze.height);
 
