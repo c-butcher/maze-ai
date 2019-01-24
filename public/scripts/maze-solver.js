@@ -23,7 +23,7 @@ function MazeSolver(maze) {
     this.mutationRate = 0.01;
     this.length = (maze.getWidth() / maze.getNodeSize()) * (maze.getHeight() / maze.getNodeSize());
     this.maze = maze;
-    this.releaseTime = 100;
+    this.releaseTime = 200;
     this.start = createVector();
     this.finish = createVector();
     this.isReleasing = false;
@@ -154,7 +154,7 @@ MazeSolver.prototype.populate = function() {
     for (let i = 0; i < this.graveyard.length; i++) {
         let fitness = this.graveyard[i].getFitness(this.maze);
         if (fitness > averageFitness) {
-            for (let a = 0; a < Math.abs(fitness * 100); a++) {
+            for (let a = 0; a < Math.abs(fitness * (100 * fitness)); a++) {
                 genePool.push(this.graveyard[i]);
             }
         }

@@ -13,7 +13,7 @@ function Organism(options) {
 
 Organism.prototype.update = function() {
     if (this.isAtPosition(this.target) && this.dna.next()) {
-        this.history.push(this.position.copy());
+        this.history.push(this.target.copy());
 
         this.velocity = this.dna.current();
         this.position = this.target;
@@ -50,9 +50,9 @@ Organism.prototype.render = function() {
  *
  * This is based on the following attributes:
  *
- * 50% - Distance traveled on path
- * 25% - Distance from start
- * 25% - Distance to finish
+ * 85% - Distance traveled on path
+ * 7.5% - Distance from start
+ * 7.5% - Distance to finish
  *
  * @param {Maze} maze
  */
@@ -72,20 +72,15 @@ Organism.prototype.getFitness = function(maze) {
     let finishPercent = (distanceFromStartToFinish - distanceToFinish) / distanceFromStartToFinish;
 
     let path = maze.getPath();
+    let nodeSize = maze.getNodeSize();
+
     let pathPercent = 0;
 
-    for (let i = 0; i < path.length; i++) {
-        let gene = this.dna.get(i);
-        if (!gene) {
-            break;
-        }
+    for (let i = 0; i < this.history.length; i++) {
+        let historyX = (this.history[i].x - (nodeSize / 2)) / nodeSize;
+        let historyY = (this.history[i].y - (nodeSize / 2)) / nodeSize;
 
-        let history = this.history[i];
-        if (!history) {
-            break;
-        }
-
-        if (path[i] && path[i].toString() === [history.x, history.y].toString()) {
+        if (path[i] && path[i].toString() === [historyX, historyY].toString()) {
             pathPercent += (i / path.length);
 
         } else {
@@ -94,9 +89,9 @@ Organism.prototype.getFitness = function(maze) {
     }
 
     this.fitness = 0;
-    this.fitness += startPercent * 25;
-    this.fitness += finishPercent * 25;
-    this.fitness += pathPercent * 50;
+    this.fitness += startPercent * 7.5;
+    this.fitness += finishPercent * 7.5;
+    this.fitness += pathPercent * 85;
 
     return this.fitness;
 };
