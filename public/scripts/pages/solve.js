@@ -14,18 +14,16 @@ function setup() {
         url: "/fetch/" + name,
         success: function(response) {
             maze = response.maze;
-            maze.startColor = hexToColor(maze.startColor);
-            maze.finishColor = hexToColor(maze.finishColor);
-            maze.floorColor = hexToColor(maze.floorColor);
-            maze.wallColor = hexToColor(maze.wallColor);
 
             loadImage("/web/images/" + maze.image, (img) => {
                 maze.image = img;
                 canvas = createCanvas(maze.width, maze.height);
                 canvas.parent('#maze-container');
 
+                maze = new Maze(maze);
                 society = new MazeSolver(maze);
                 society.populate();
+                society.release();
             });
         }
     });
@@ -33,7 +31,8 @@ function setup() {
 
 function draw() {
     if (society) {
-        background(society.maze.image);
+        background(0);
+        image(maze.getImage(), 0, 0);
         society.advance();
     }
 }

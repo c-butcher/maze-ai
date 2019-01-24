@@ -1,37 +1,57 @@
 function MazeSolver(maze) {
+
+    /**
+     *
+     * @type {Organism[]}
+     */
     this.population = [];
+
+    /**
+     *
+     * @type {Organism[]}
+     */
+    this.queue = [];
+
+    /**
+     *
+     * @type {Organism[]}
+     */
     this.graveyard = [];
-    this.populationSize = 200;
+    this.populationSize = 100;
     this.totalOrganisms = 0;
     this.generation = 0;
-    this.length = (maze.width / maze.nodeSize) * (maze.height / maze.nodeSize);
+    this.mutationRate = 0.01;
+    this.length = (maze.getWidth() / maze.getNodeSize()) * (maze.getHeight() / maze.getNodeSize());
     this.maze = maze;
-    this.releaseTime = 500;
+    this.releaseTime = 100;
     this.start = createVector();
     this.finish = createVector();
+    this.isReleasing = false;
 
     this.findStartAndFinish();
     this.fittest = new Organism({
         dna: this.createDNA(),
         position: this.start.copy(),
         velocity: createVector(),
-        stepDistance: this.maze.nodeSize,
-        size: Math.round(this.maze.nodeSize / 4)
+        stepDistance: this.maze.getNodeSize(),
+        size: Math.round(this.maze.getNodeSize() / 4)
     });
 }
 
 MazeSolver.prototype.findStartAndFinish = function() {
-    for (let row = 0; row <= this.maze.width / this.maze.nodeSize; row++) {
-        for (let column = 0; column <= this.maze.height / this.maze.nodeSize; column++) {
-            let x = (row * this.maze.nodeSize) - this.maze.nodeSize / 2;
-            let y = (column * this.maze.nodeSize) - this.maze.nodeSize / 2;
+    let nodeSize = this.maze.getNodeSize();
+    
+    for (let row = 0; row <= this.maze.getWidth() / nodeSize; row++) {
+        for (let column = 0; column <= this.maze.getHeight() / this.maze.getNodeSize(); column++) {
+            let x = (row * this.maze.getNodeSize()) - this.maze.getNodeSize() / 2;
+            let y = (column * this.maze.getNodeSize()) - this.maze.getNodeSize() / 2;
 
-            let color = this.maze.image.get(x, y);
+            let color = this.maze.getImage().get(x, y);
 
-            if (this.maze.startColor.matches(color)) {
+            if (this.maze.getStartColor().matches(color)) {
                 this.start = createVector(x, y);
 
-            } else if (this.maze.finishColor.matches(color)) {
+            } else if (this.maze.getFinishColor().matches(color)) {
                 this.finish = createVector(x, y);
             }
         }
@@ -40,12 +60,7 @@ MazeSolver.prototype.findStartAndFinish = function() {
 
 MazeSolver.prototype.advance = function() {
     for (let i = 0; i < this.population.length; i++) {
-        if (this.population[i].isAtPosition(this.population[i].target)) {
-            let fitness = this.fitness(this.population[i]);
-            if (fitness > this.fittest.fitness) {
-                this.fittest = this.population[i];
-            }
-        }
+        this.population[i].update();
 
         if (this.isAlive(this.population[i])) {
             this.population[i].update();
@@ -75,10 +90,30 @@ MazeSolver.prototype.createDNA = function() {
     return new DNAStrain(this.materials.all(), this.length, genes);
 };
 
-MazeSolver.prototype.mate = function() {
-    let baby = this.fittest.dna.genes.slice();
-    for (let i = this.fittest.dna.getCurrentNumber(); i < this.fittest.dna.genes.length; i++) {
-        baby[i] = this.materials.next(baby[i - 1]);
+/**
+ *
+ * @param {Organism} parentOne
+ * @param {Organism} parentTwo
+ *
+ * @returns {Organism}
+ */
+MazeSolver.prototype.mate = function(parentOne, parentTwo) {
+    let genesOne = parentOne.dna.genes.slice();
+    let genesTwo = parentTwo.dna.genes.slice();
+    let baby = parentOne.dna.genes.slice();
+    let diverged = false;
+
+    for (let i = 0; i < genesOne.length; i++) {
+        if (Math.random() < this.mutationRate) {
+            baby[i] = this.materials.next(baby[i - 1]);
+            diverged = true;
+
+        } else if (!diverged && genesOne[i].equals(genesTwo[i])) {
+            baby[i] = genesOne[i];
+
+        } else {
+            baby[i] = this.materials.next(baby[i - 1]);
+        }
     }
 
     let strain = new DNAStrain(this.materials.all(), this.length, baby);
@@ -87,70 +122,93 @@ MazeSolver.prototype.mate = function() {
         dna: strain,
         position: this.start.copy(),
         velocity: createVector(),
-        stepDistance: this.maze.nodeSize,
-        size: Math.round(this.maze.nodeSize / 4)
+        stepDistance: this.maze.getNodeSize(),
+        size: Math.round(this.maze.getNodeSize() / 4)
     });
 };
 
 MazeSolver.prototype.isAlive = function(organism) {
-    let color = this.maze.image.get(organism.position.x, organism.position.y);
-    return color.toString() !== this.maze.wallColor.levels.toString();
+    let color = this.maze.getImage().get(organism.position.x, organism.position.y);
+    return color.toString() !== this.maze.getWallColor().levels.toString();
 };
 
 MazeSolver.prototype.populate = function() {
-    if (this.population.length < this.populationSize) {
-        let fittest = [];
-        let lastFitness = 0;
-        for (let i = 0; i < this.population.length; i++) {
-            if (this.population[i].fitness > lastFitness) {
-                fittest.push(this.population[i]);
+    this.isReleasing = false;
+
+    let nodeSize = this.maze.getNodeSize();
+
+    /**
+     * Calculate the average fitness of all the organisms in the graveyard.
+     *
+     * @param {Number} accumulator
+     * @param {Organism} organism
+     * @param {Number} averageFitness
+     */
+    let averageFitness = this.graveyard.reduce((accumulator, organism) => accumulator + organism.getFitness(this.maze), 0);
+    averageFitness = averageFitness / this.graveyard.length;
+
+    /**
+     * @param {Organism[]} genePool
+     */
+    let genePool = [];
+    for (let i = 0; i < this.graveyard.length; i++) {
+        let fitness = this.graveyard[i].getFitness(this.maze);
+        if (fitness > averageFitness) {
+            for (let a = 0; a < Math.abs(fitness * 100); a++) {
+                genePool.push(this.graveyard[i]);
             }
         }
+    }
 
-        if (fittest.length < 1) {
-            this.population.push(new Organism({
+    this.queue = [];
+    this.graveyard = [];
+    this.population = [];
+
+    if (genePool.length < 1) {
+        for (let i = 0; i < this.populationSize; i++) {
+            this.queue.push(new Organism({
                 dna: this.createDNA(),
                 position: this.start.copy(),
                 velocity: createVector(),
-                stepDistance: this.maze.nodeSize,
-                size: Math.round(this.maze.nodeSize / 4)
+                stepDistance: nodeSize,
+                size: Math.round(nodeSize / 4)
             }));
-
-        } else {
-            let index = Math.floor((fittest.length / 3) * 2);
-            let topThirdOfPopulation = fittest.slice(index);
-
-            let parentOne = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
-            let parentTwo = topThirdOfPopulation[Math.random() * topThirdOfPopulation.length];
-
-            let baby = this.mate(parentOne, parentTwo);
-            this.population.push(baby);
         }
+
+    } else for (let i = 0; i < this.populationSize; i++) {
+        let parentOne = genePool[Math.floor(Math.random() * genePool.length)];
+        let parentTwo = genePool[Math.floor(Math.random() * genePool.length)];
+
+        let baby = this.mate(parentOne, parentTwo);
+        this.queue.push(baby);
     }
 
     this.totalOrganisms++;
-    this.generation = Math.floor(this.totalOrganisms / this.populationSize);
-
-    setTimeout(() => {
-        this.populate();
-    }, this.releaseTime);
+    this.generation++;
+    this.isReleasing = true;
 };
 
-MazeSolver.prototype.fitness = function(organism) {
-    let x = Math.round(((organism.position.x + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
-    let y = Math.round(((organism.position.y + this.maze.nodeSize / 2) / this.maze.nodeSize) - 1);
+/**
+ * Release
+ */
+MazeSolver.prototype.release = function() {
+    if (this.isReleasing) {
+        if (this.queue.length > 0) {
+            this.population.push(this.queue.pop());
+        }
 
-    let position = organism.dna.getCurrentNumber();
-    if (this.maze.pathToFinish[position] && this.maze.pathToFinish[position].toString() === [x, y].toString()) {
-        organism.fitness += position / this.maze.pathToFinish.length;
-
-    } else {
-        organism.fitness -= (position / this.maze.pathToFinish.length) / 3;
+        if (this.graveyard.length === this.populationSize) {
+            this.populate();
+        }
     }
 
-    return organism.fitness;
+    setTimeout(() => this.release(), this.releaseTime);
 };
 
+/**
+ *
+ * @type {{all: (function(): p5.Vector[]), next: (function(*): *), DOWN: p5.Vector, LEFT: p5.Vector, RIGHT: p5.Vector, UP: p5.Vector}}
+ */
 MazeSolver.prototype.materials = {
     UP: new p5.Vector(0, -1),
     DOWN: new p5.Vector(0, 1),
