@@ -250,7 +250,7 @@ MazeSolver.prototype.populate = function() {
     for (let i = 0; i < this.graveyard.length; i++) {
         let fitness = this.graveyard[i].getFitness(this.maze);
         if (fitness >= averageFitness) {
-            for (let a = 0; a < Math.abs(fitness * (100 * fitness)); a++) {
+            for (let a = 0; a < Math.abs(fitness * 100); a++) {
                 genePool.push(this.graveyard[i]);
             }
         }
