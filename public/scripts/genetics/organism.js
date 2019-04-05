@@ -75,9 +75,9 @@ Organism.prototype.render = function() {
 /**
  * Grade the organisms fitness level to determine whether it would make an acceptable mate.
  *
- * 85% - Distance traveled on path
- * 7.5%  - Distance from start
- * 7.5%  - Distance to finish
+ * 95%   - Distance traveled on path
+ * 2.5%  - Distance from start
+ * 2.5%  - Distance to finish
  *
  * @param {Maze} maze
  */
@@ -139,9 +139,9 @@ Organism.prototype.getFitness = function(maze) {
 
     // Now we can combine our percentages together, distributing the values by their level of importance.
     this.fitness = 0;
-    this.fitness += startPercent * 7.5;
-    this.fitness += finishPercent * 7.5;
-    this.fitness += pathPercent * 85;
+    this.fitness += startPercent * 2.5;
+    this.fitness += finishPercent * 2.5;
+    this.fitness += pathPercent * 95;
 
     return this.fitness;
 };

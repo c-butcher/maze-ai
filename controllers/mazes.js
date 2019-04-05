@@ -65,6 +65,39 @@ router.get('/fetch/:name', (req, res, next) => {
 });
 
 /**
+ * Search mazes by width, height or node size.
+ */
+router.post('/search', (req, res, next) => {
+    let search = {
+        width: req.body.width,
+        height: req.body.height,
+        nodeSize: req.body.nodeSize
+    };
+
+    Maze.find(search)
+        .skip(parseInt(req.body.offset))
+        .limit(parseInt(req.body.limit))
+        .exec((error, mazes) => {
+            if (error) { next(error) }
+
+            for (let i = 0; i < mazes.length; i++) {
+                let path = imgPath + mazes[i].name + '.png';
+                if (!mazes || !fs.existsSync(path)) {
+                    return res.json({
+                        success: false,
+                        mazes: null,
+                    });
+                }
+            }
+
+            res.json({
+                success: true,
+                mazes
+            });
+        });
+});
+
+/**
  * Save MazeGenerator Image
  *
  * This is an AJAX method for saving a maze image.

@@ -21,6 +21,7 @@ app.set('view engine', 'pug');
 
 app.use('/web', express.static('public'));
 app.use('/web/p5', express.static('node_modules/p5/lib'));
+app.use('/web/tf', express.static('node_modules/@tensorflow/tfjs/dist'));
 
 app.use('/', require('./controllers/mazes'));
 app.use('/learn', require('./controllers/learning'));

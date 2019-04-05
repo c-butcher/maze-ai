@@ -23,4 +23,25 @@ router.get('/solve/:name', (req, res) => {
     });
 });
 
+/**
+ * Configure the learning algorithm before we start attempting
+ * to solve the puzzle.
+ *
+ */
+router.get('/train/:name', (req, res) => {
+    Maze.findOne({name: req.params.name}, (error, maze) => {
+        if (error) { throw error; }
+
+        let path = imgPath + req.params.name + '.png';
+        if (!maze || !fs.existsSync(path)) {
+            return res.redirect('/');
+        }
+
+        res.render('learn/train', {
+            title: "Training Maze",
+            maze: maze
+        });
+    });
+});
+
 module.exports = router;
